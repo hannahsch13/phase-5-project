@@ -17,9 +17,9 @@ class User(db.Model, SerializerMixin):
     role = db.Column(db.String)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, server_default=db.func.now(), onupdate=db.func.now())
-    bookclub_id = db.Column(db.Integer, db.ForeignKey('bookclubs.id'))
+    # bookclub_id = db.Column(db.Integer, db.ForeignKey('bookclubs.id'))
 
-    bookclub = db.relationship('BookClub', back_populates= 'users')
+    # bookclub = db.relationship('BookClub', back_populates= 'users')
     # posts = db.relationship('Post', back_populates='users')
 
 
@@ -41,16 +41,16 @@ class User(db.Model, SerializerMixin):
     
 
 
-class BookClub(db.Model, SerializerMixin):
-    __tablename__ = 'bookclubs'
+# class BookClub(db.Model, SerializerMixin):
+#     __tablename__ = 'bookclubs'
 
 
 
-    id = db.Column(db.Integer, primary_key= True)
-    club_name = db.Column(db.String)
-    picture = db.Column(db.String)
+#     id = db.Column(db.Integer, primary_key= True)
+#     club_name = db.Column(db.String)
+#     picture = db.Column(db.String)
 
-    users = db.relationship('User', back_populates= 'bookclub')
+#     users = db.relationship('User', back_populates= 'bookclub')
 #     books = db.relationship('Book', secondary ='club_books', back_populates = "bookclubs")
     
 
