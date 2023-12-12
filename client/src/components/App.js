@@ -24,7 +24,30 @@ function App() {
     })
   }, [])
 
-  const context = {user, setUser}
+
+  useEffect(()=> {
+    fetch('/users')
+    .then((resp)=> resp.json())
+    .then(setUser)
+  }, []);
+
+  // useEffect(() => {
+  //   const fetchData= async () => {
+  //     try {
+  //       const response= await fetch('/users');
+  //       const data = await response.json();
+  //       setUser(data);
+  //     } catch (error) {
+  //       console.error('Error fetching user data:', error);
+  //     }  
+  //   };
+  //   fetchData();
+  // }, []);
+
+  const context = {
+    user, 
+    setUser
+  }
 
 // function handleLogout() {
 //   fetch('/logout', {

@@ -12,7 +12,7 @@ import Homepage from "./components/Homepage"
 import Signup from "./components/Signup";
 import Login from './components/Login';
 import App from "./components/App";
-
+import ProfileList from "./components/ProfileList"
 
 
 
@@ -44,6 +44,10 @@ const router = createBrowserRouter ([
             {
                 path: '/signup',
                 element: <Signup/>
+            },
+            {
+                path: '/users',
+                element: <ProfileList/>
             }    
         ]
     }

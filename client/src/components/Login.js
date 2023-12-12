@@ -1,4 +1,4 @@
-import {TextField, Button, Box} from '@mui/material';
+import {TextField, Button, Box, Typography} from '@mui/material';
 import {useFormik} from 'formik'
 import * as Yup from 'yup'
 import {useState, useContext} from 'react'
@@ -50,10 +50,10 @@ function Login() {
         <Box>
             {/* {Object.keys(formik.errors).map((key) => <li> {formik.errors[key]}</li>)} */}
             <form onSubmit= {formik.handleSubmit}>
-                <TextField id= 'username' label= "Username" variant= 'outlined' required value= {formik.values.username} onChange={formik.handleChange} />
-                {formik.errors.username}
-                <TextField id="password" label= 'Password' type= 'password' variant='outlined' required value={formik.values.password} onChange={formik.handleChange}/>
-                {formik.errors.password}
+                <TextField id= 'username' label= "Username" variant= 'outlined' required value= {formik.values.username} onChange={formik.handleChange} onBlur = {formik.handleBlur} />
+                {formik.touched.username && formik.errors.username && <Typography color="error">{formik.errors.username}</Typography>}
+                <TextField id="password" label= 'Password' type= 'password' variant='outlined' required value={formik.values.password} onChange={formik.handleChange} onBlur = {formik.handleBlur}/>
+                {formik.touched.password && formik.errors.password && <Typography color="error">{formik.errors.password}</Typography>}
             <Button variant= "contained" type="Submit"> Submit</Button>
             </form>
         </Box>
