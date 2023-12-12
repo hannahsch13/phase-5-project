@@ -1,4 +1,4 @@
-import {TextField, Button, Box} from '@mui/material';
+import {TextField, Button, Box, Typography} from '@mui/material';
 import {useFormik} from 'formik'
 import * as Yup from 'yup'
 import {useState, useContext} from 'react'
@@ -28,36 +28,45 @@ function Signup() {
             passwordConfirmation: ''
         },
         validationSchema: signupSchema,
-        onSubmit: (values, {resetForm}) => {
-            fetch('/users', {
+        onSubmit: async (values, {resetForm}) => {
+            try {
+                const response = await fetch('/users', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(values)
-            }).then((resp) => {
-                if (resp.ok) {
-                    resetForm({values: ''})
-                    resp.json().then(({user}) => {
-                        setUser(user)
-                        navigate('/home')
-                    })
-                } else {
-                    console.log('error')
-                }
-            })
+            });
+            
+            if (response.ok) {
+                const {user} = await response.json();
+                setUser(user);
+                resetForm({values: ''})
+                navigate('/home');
+            } else {
+                console.error('Error:', response.status);
+                const errorData = await response.json();
+                console.error('Error Data:', errorData);
+            }
+        } catch (error) {
+            console.error('Request failed:', error.message);
         }
-    })
+    },
+});    
 
 
     return (
         <Box>
-            {Object.keys(formik.errors).map((key) => <li> {formik.errors[key]}</li>)}
+            {/* {Object.keys(formik.errors).map((key) => <li> {formik.errors[key]}</li>)} */}
             <form onSubmit= {formik.handleSubmit}>
-                <TextField id= 'username' label= "Username" variant= 'outlined' required value= {formik.values.username} onChange={formik.handleChange} />
-                <TextField id="email" label= 'Email' variant='outlined' required  value={formik.values.email} onChange={formik.handleChange}/>
-                <TextField id="password" label= 'Password' type= 'password' variant='outlined' required value={formik.values.password} onChange={formik.handleChange}/>
-                <TextField id="passwordConfirmation" label= 'Confirm Password' type= 'password' variant='outlined' required value={formik.values.passwordConfirmation} onChange={formik.handleChange}/>
+                <TextField id= 'username' label= "Username" variant= 'outlined' required value= {formik.values.username} onChange={formik.handleChange}  onBlur = {formik.handleBlur}/>
+                {formik.touched.username && formik.errors.username && <Typography color="error">{formik.errors.username}</Typography>}
+                <TextField id="email" label= 'Email' variant='outlined' required  value={formik.values.email} onChange={formik.handleChange} onBlur = {formik.handleBlur}/>
+                {formik.touched.email && formik.errors.email && <Typography color="error">{formik.errors.email}</Typography>}
+                <TextField id="password" label= 'Password' type= 'password' variant='outlined' required value={formik.values.password} onChange={formik.handleChange} onBlur = {formik.handleBlur}/>
+                {formik.touched.password && formik.errors.password && <Typography color="error">{formik.errors.password}</Typography>}
+                <TextField id="passwordConfirmation" label= 'Confirm Password' type= 'password' variant='outlined' required value={formik.values.passwordConfirmation} onChange={formik.handleChange} onBlur = {formik.handleBlur}/>
+                {formik.touched.passwordConfirmation && formik.errors.passwordConfirmation && (<Typography color="error">{formik.errors.passwordConfirmation}</Typography>)}
             <Button variant= "contained" type="Submit"> Submit</Button>
             </form>
         </Box>

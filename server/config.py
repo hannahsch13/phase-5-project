@@ -29,6 +29,6 @@ db.init_app(app)
 api = Api(app)
 bcrypt = Bcrypt(app)
 # Instantiate CORS
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
 app.secret_key = b'.\x9d\\\x7f\x8e\x1b\x983\x8f\x87\xd0\xb5V/\r^'

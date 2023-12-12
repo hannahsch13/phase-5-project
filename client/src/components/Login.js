@@ -48,10 +48,12 @@ function Login() {
 
     return (
         <Box>
-            {Object.keys(formik.errors).map((key) => <li> {formik.errors[key]}</li>)}
+            {/* {Object.keys(formik.errors).map((key) => <li> {formik.errors[key]}</li>)} */}
             <form onSubmit= {formik.handleSubmit}>
                 <TextField id= 'username' label= "Username" variant= 'outlined' required value= {formik.values.username} onChange={formik.handleChange} />
+                {formik.errors.username}
                 <TextField id="password" label= 'Password' type= 'password' variant='outlined' required value={formik.values.password} onChange={formik.handleChange}/>
+                {formik.errors.password}
             <Button variant= "contained" type="Submit"> Submit</Button>
             </form>
         </Box>
