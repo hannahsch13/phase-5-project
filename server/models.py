@@ -41,7 +41,7 @@ class User(db.Model, SerializerMixin):
     
 
 
-# class Bookclub(db.Model, SerializerMixin):
+# class BookClub(db.Model, SerializerMixin):
 #     __tablename__ = 'bookclubs'
 
 
@@ -50,7 +50,7 @@ class User(db.Model, SerializerMixin):
 #     club_name = db.Column(db.String)
 #     picture = db.Column(db.String)
 
-#     members = db.relationship('User', back_populates= 'bookclub')
+#     users = db.relationship('User', back_populates= 'bookclub')
 #     books = db.relationship('Book', secondary ='club_books', back_populates = "bookclubs")
     
 
@@ -69,7 +69,7 @@ class User(db.Model, SerializerMixin):
 #     # club_id = db.Column(db.Integer, db.ForeignKey ('bookclubs.id'))
 
 #     bookclubs = db.relationship('BookClub', secondary= 'club_books', back_populates= 'books')
-#     posts = db.relationship('Book', back_populates ='book')
+#     posts = db.relationship('Book', back_populates ='books')
 
     
 
@@ -78,8 +78,8 @@ class User(db.Model, SerializerMixin):
 #     __tablename__ = 'club_books'
 
 #     id = db.Column(db.Integer, primary_key=True)
-#     club_id = db.Column(db.Integer, db.ForeignKey('bookclubs.id'))
-#     book_id = db.Column(db.Integer, db.ForeignKey('books.id'))
+#     club_id = db.Column(db.Integer, db.ForeignKey('bookclubs.id', ondelete='cascade'))
+#     book_id = db.Column(db.Integer, db.ForeignKey('books.id', ondelete='cascade'))
 
 # class Post(db.Model, SerializerMixin):
 #     __tablename__ = 'posts'

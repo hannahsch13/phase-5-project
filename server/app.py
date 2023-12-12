@@ -15,15 +15,22 @@ from models import User
 
 
 class Users(Resource):
+    def get(self):
+        user_list= [user.to_dict() for user in User.query.all()]
+        return make_response(user_list, 200)
+
     def post(self):
         data = request.get_json()
-        user = User(username=data['username'], email=data['email'], password_hash=data['password'])
+        user = User(username=data['username'], email=data['email'], password_hash=data['password'], created_at=datetime.utcnow(), updated_at=datetime.utcnow())
         db.session.add(user)
         db.session.commit()
         session['user_id'] = user.id
         return make_response({'user': user.to_dict()}, 201 )
 
 api.add_resource(Users, '/users')  
+
+
+
 
 @app.route('/authorized')
 def authorized():
