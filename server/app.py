@@ -10,6 +10,7 @@ from datetime import datetime
 from config import db, api, app
 # Add your model imports
 from models import User
+from models import BookClub
 
 # Views go here!
 
@@ -58,6 +59,23 @@ def login():
             return make_response({'error': 'incorrect password'}, 401)
     except:
         return make_response({'error': 'username incorrect'}, 401)
+
+
+
+class BookClubs(Resource):
+    def get(self):
+        club_list= [club.to_dict() for club in BookClub.query.all()]
+        return make_response(club_list, 200)
+
+    def post(self):
+        data = request.get_json()
+        club = BookClub(club_name=data['club_name'], picture=data['picture'])
+        db.session.add(club)
+        db.session.commit()
+        # session['user_id'] = user.id
+        return make_response(club.to_dict(), 201 )
+
+api.add_resource(BookClubs, '/clubs')  
 
 
 

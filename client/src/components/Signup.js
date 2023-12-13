@@ -5,11 +5,11 @@ import {useState, useContext} from 'react'
 import { useOutletContext, useNavigate } from 'react-router-dom'
 import { NavLink } from 'react-router-dom';
 
-import { OutletContext } from './App'
+import { UserContext } from './App'
 
 
 function Signup() {
-    const { setUser } = useContext(OutletContext)
+    const { setUser } = useContext(UserContext)
     const [type, setType] = useState('password');
     const navigate = useNavigate()
 
@@ -96,7 +96,7 @@ const formik = useFormik({
     return (
         <Box>
             {/* {Object.keys(formik.errors).map((key) => <li> {formik.errors[key]}</li>)} */}
-            <form onSubmit= {formik.handleSubmit}>
+            <form className= "form" onSubmit= {formik.handleSubmit}>
                 <TextField id= 'username' label= "Username" variant= 'outlined' required value= {formik.values.username} onChange={formik.handleChange}  onBlur = {formik.handleBlur}/>
                 {formik.touched.username && formik.errors.username && <Typography color="error">{formik.errors.username}</Typography>}
                 <TextField id="email" label= 'Email' variant='outlined' required  value={formik.values.email} onChange={formik.handleChange} onBlur = {formik.handleBlur}/>

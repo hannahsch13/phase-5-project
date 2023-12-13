@@ -3,10 +3,10 @@ import {useFormik} from 'formik'
 import * as Yup from 'yup'
 import {useState, useContext} from 'react'
 import { NavLink, useNavigate } from 'react-router-dom';
-import {OutletContext} from './App'
+import {UserContext} from './App'
 
 function Login() {
-    const {setUser} = useContext(OutletContext)
+    const {setUser} = useContext(UserContext)
     const navigate = useNavigate()
 
     const loginSchema = Yup.object().shape({
@@ -49,7 +49,7 @@ function Login() {
     return (
         <Box>
             {/* {Object.keys(formik.errors).map((key) => <li> {formik.errors[key]}</li>)} */}
-            <form onSubmit= {formik.handleSubmit}>
+            <form className = "form" onSubmit= {formik.handleSubmit}>
                 <TextField id= 'username' label= "Username" variant= 'outlined' required value= {formik.values.username} onChange={formik.handleChange} onBlur = {formik.handleBlur} />
                 {formik.touched.username && formik.errors.username && <Typography color="error">{formik.errors.username}</Typography>}
                 <TextField id="password" label= 'Password' type= 'password' variant='outlined' required value={formik.values.password} onChange={formik.handleChange} onBlur = {formik.handleBlur}/>

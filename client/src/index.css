@@ -1,7 +1,37 @@
-/* :root {
-  --bg: #282c34;
-  --header: #fff;
-  --link: #61dafb;
-  --text: hsla(0, 0%, 100%, 0.88);
-} */
+/* form css */
 
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form .MuiTextField-root {
+  margin: 8px;
+  width: 300px; /* Adjust the width as needed */
+}
+
+.form .MuiButton-root {
+  margin: 16px;
+}
+
+
+/* homepage css */
+
+.container {
+  margin-top: 2rem;
+}
+
+.paper {
+  padding: 2rem;
+}
+
+.buttonContainer {
+  margin-right: 1rem;
+}
+
+/* new club form  */
+
+.formTitle {
+  text-align: center;
+}

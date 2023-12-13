@@ -6,12 +6,16 @@ import {Button} from "@mui/material";
 // import index from './styling/index.css';
 import Signup from "./Signup";
 import NavBar from "./NavBar";
+import Homepage from "./Homepage";
 
 
-export const OutletContext = createContext();
+export const UserContext = createContext();
+export const ClubContext = createContext();
 
 function App() {
   const [user, setUser] = useState(null)
+  const [club, setClub] = useState('')
+  
 
   useEffect(()=> {
     fetch('/authorized')
@@ -31,6 +35,19 @@ function App() {
     .then(setUser)
   }, []);
 
+  useEffect(()=> {
+    fetch('/clubs')
+    .then((resp)=> resp.json())
+    .then(setClub)
+  }, []);
+
+
+  // useEffect(() => {
+  //   fetch('/clubs')
+  //   .then((resp)=> resp.json())
+  //   .then(setClub)
+  // }, [])
+
   // useEffect(() => {
   //   const fetchData= async () => {
   //     try {
@@ -46,7 +63,9 @@ function App() {
 
   const context = {
     user, 
-    setUser
+    setUser,
+    club,
+    setClub
   }
 
 // function handleLogout() {
@@ -62,11 +81,13 @@ function App() {
 return (
   <div className='App'>
     <header>
-      <NavBar user={user} setUser={setUser}/>
+      <NavBar user={user} setUser={setUser} club={club} setClub={setClub}/>
     </header>
-    <OutletContext.Provider value= {{user, setUser}}>
+    <ClubContext.Provider value= {{club, setClub}}>
+    <UserContext.Provider value= {{user, setUser}}>
     <Outlet context={context}/>
-    </OutletContext.Provider>
+    </UserContext.Provider>
+    </ClubContext.Provider>
   </div>
 );
 }
