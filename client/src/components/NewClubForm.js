@@ -1,16 +1,18 @@
 import {TextField, Button, Box, Typography} from '@mui/material';
 import {useFormik} from 'formik'
 import * as Yup from 'yup'
-import {useState, useContext} from 'react'
+import {useState, useContext, useEffect} from 'react'
 import { useOutletContext, useNavigate } from 'react-router-dom'
 import { NavLink } from 'react-router-dom';
 
 import { ClubContext } from './App'
+import { UserContext } from './App';
 
 
 
 function NewClubForm() {
     const {setClub} = useContext(ClubContext)
+    const {user} = useContext(UserContext)
     const navigate = useNavigate()
 
     const newClubSchema = Yup.object().shape({
@@ -54,13 +56,15 @@ const formik = useFormik({
     },
 });
 
-console.log(formik.values.club_name)
 return (
     
     <Box>
+        {user && (
         <Typography variant="h5" gutterBottom className= "formTitle">
         Create a new book club!
       </Typography>
+        )}
+      {user && (
         <form className= 'form' onSubmit= {formik.handleSubmit}>
             <TextField id= 'club_name' label= "Club Name" variant= 'outlined' required value= {formik.values.club_name} onChange={formik.handleChange}  onBlur = {formik.handleBlur}/>
             {formik.touched.club_name && formik.errors.club_name && <Typography color="error">{formik.errors.club_name}</Typography>}
@@ -68,6 +72,7 @@ return (
             {formik.touched.picture && formik.errors.picture && <Typography color="error">{formik.errors.picture}</Typography>}
         <Button variant= "contained" type="submit"> Submit</Button>
         </form>
+      )}
     </Box>
     )
 }

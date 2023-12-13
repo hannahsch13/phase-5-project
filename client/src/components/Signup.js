@@ -14,6 +14,7 @@ function Signup() {
     const navigate = useNavigate()
 
     const signupSchema = Yup.object().shape({
+        name: Yup.string().min(1, 'Name Too Short!').max(50, 'Name Too Long!'),
         username: Yup.string().min(5, 'Username Too Short!').max(15, 'Username Too Long!').required('Username required!'),
         email: Yup.string().email('Invalid email').required('Email required'),
         password: Yup.string().min(5, 'Password Too Short!').max(15, 'Password Too Long!').required('Password required!'),
@@ -56,6 +57,7 @@ function Signup() {
 
 const formik = useFormik({
     initialValues: {
+        name: '',
         username: '',
         email: '',
         password: '',
@@ -97,6 +99,8 @@ const formik = useFormik({
         <Box>
             {/* {Object.keys(formik.errors).map((key) => <li> {formik.errors[key]}</li>)} */}
             <form className= "form" onSubmit= {formik.handleSubmit}>
+                <TextField id= 'name' label= "Name" variant= 'outlined' required value= {formik.values.name} onChange={formik.handleChange}  onBlur = {formik.handleBlur}/>
+                {formik.touched.name && formik.errors.name && <Typography color="error">{formik.errors.name}</Typography>}
                 <TextField id= 'username' label= "Username" variant= 'outlined' required value= {formik.values.username} onChange={formik.handleChange}  onBlur = {formik.handleBlur}/>
                 {formik.touched.username && formik.errors.username && <Typography color="error">{formik.errors.username}</Typography>}
                 <TextField id="email" label= 'Email' variant='outlined' required  value={formik.values.email} onChange={formik.handleChange} onBlur = {formik.handleBlur}/>

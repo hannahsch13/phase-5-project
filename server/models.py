@@ -8,10 +8,11 @@ from config import db, bcrypt
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
 
-    serialize_rules = ('-_password_hash',)
+    serialize_rules = ('-_password_hash', '-bookclub.users', '-bookclub.users.bookclub')
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, unique=True, nullable = False)
+    name = db.Column(db.String)
     email = db.Column(db.String)
     _password_hash = db.Column(db.String)
     role = db.Column(db.String)
@@ -44,7 +45,7 @@ class User(db.Model, SerializerMixin):
 class BookClub(db.Model, SerializerMixin):
     __tablename__ = 'bookclubs'
 
-
+    serialize_rules = ('-users.bookclub',)
 
     id = db.Column(db.Integer, primary_key= True)
     club_name = db.Column(db.String)
