@@ -45,7 +45,9 @@ class User(db.Model, SerializerMixin):
 class BookClub(db.Model, SerializerMixin):
     __tablename__ = 'bookclubs'
 
-    serialize_rules = ('-users.bookclub',)
+    serialize_rules = ('-users.bookclub')
+
+# ,'club_books.bookclub'
 
     id = db.Column(db.Integer, primary_key= True)
     club_name = db.Column(db.String)
@@ -53,34 +55,41 @@ class BookClub(db.Model, SerializerMixin):
 
     users = db.relationship('User', back_populates= 'bookclub', cascade= 'all, delete-orphan')
 #     books = db.relationship('Book', secondary ='club_books', back_populates = "bookclubs")
+    books = association_proxy('club_books', 'books')
+
+
+class Book(db.Model, SerializerMixin):
+    __tablename__ = 'books'
+
     
 
-
-# class Book(db.Model, SerializerMixin):
-#     __tablename__ = 'books'
-
-    
-
-#     id = db.Column(db.Integer, primary_key= True)
-#     title = db.Column(db.String, unique= True, nullable= False)
-#     author = db.Column(db.String)
-#     cover = db.Column(db.String)
+    id = db.Column(db.Integer, primary_key= True)
+    title = db.Column(db.String, unique= True, nullable= False)
+    author = db.Column(db.String)
+    cover = db.Column(db.String)
 
 
-#     # club_id = db.Column(db.Integer, db.ForeignKey ('bookclubs.id'))
+    club_id = db.Column(db.Integer, db.ForeignKey ('bookclubs.id'))
 
-#     bookclubs = db.relationship('BookClub', secondary= 'club_books', back_populates= 'books')
+    # bookclubs = association_proxy('club_books', 'bookclub')
+    club_books = association_proxy('club_books', 'bookclub')
 #     posts = db.relationship('Book', back_populates ='books')
 
     
 
 
-# class ClubBook(db.Model, SerializerMixin): 
-#     __tablename__ = 'club_books'
+class ClubBook(db.Model, SerializerMixin): 
+    __tablename__ = 'club_books'
 
-#     id = db.Column(db.Integer, primary_key=True)
-#     club_id = db.Column(db.Integer, db.ForeignKey('bookclubs.id', ondelete='cascade'))
-#     book_id = db.Column(db.Integer, db.ForeignKey('books.id', ondelete='cascade'))
+    id = db.Column(db.Integer, primary_key=True)
+    month = db.Column(db.String)
+    club_id = db.Column(db.Integer, db.ForeignKey('bookclubs.id', ondelete='cascade'))
+    book_id = db.Column(db.Integer, db.ForeignKey('books.id', ondelete='cascade'))
+
+    book = db.relationship('Book', back_populates = 'club_books')
+    bookclub = db.relationship('BookClub', back_populates= 'club_books')
+
+    # serialize_rules= ('-book.club_books', 'bookclub.club_books')
 
 # class Post(db.Model, SerializerMixin):
 #     __tablename__ = 'posts'

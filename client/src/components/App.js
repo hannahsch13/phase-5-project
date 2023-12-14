@@ -13,13 +13,14 @@ export const UserContext = createContext();
 export const ClubContext = createContext();
 export const UsersContext = createContext();
 export const ClubsContext = createContext();
+export const BooksContext = createContext();
 
 function App() {
   const [user, setUser] = useState(null)
   const [users, setUsers] = useState(null)
   const [club, setClub] = useState('')
   const [clubs, setClubs] = useState('')
-  
+  const [books, setBooks] = useState('')
 
   useEffect(()=> {
     fetch('/authorized')
@@ -44,6 +45,12 @@ function App() {
     .then((resp)=> resp.json())
     .then(setClubs)
   }, []);
+
+  useEffect(()=>{
+    fetch('/books')
+    .then((resp)=> resp.json())
+    .then(setBooks)
+  },[]);
 
 
   // useEffect(() => {
@@ -73,7 +80,9 @@ function App() {
     users,
     setUsers,
     clubs, 
-    setClubs
+    setClubs,
+    books,
+    setBooks
   }
 
 // function handleLogout() {
@@ -91,6 +100,7 @@ return (
     <header>
       <NavBar user={user} setUser={setUser} club={club} setClub={setClub} users= {users} setUsers={setUsers}/>
     </header>
+    <BooksContext.Provider value = {{books, setBooks}}>
     <ClubsContext.Provider value= {{clubs, setClubs}}>
     <ClubContext.Provider value= {{club, setClub}}>
     <UserContext.Provider value= {{user, setUser}}>
@@ -100,6 +110,7 @@ return (
     </UserContext.Provider>
     </ClubContext.Provider>
     </ClubsContext.Provider>
+    </BooksContext.Provider>
   </div>
 );
 }
