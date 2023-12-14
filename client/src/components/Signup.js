@@ -21,40 +21,6 @@ function Signup() {
         passwordConfirmation: Yup.string().required('Must confirm password').oneOf([Yup.ref('password')],'Passwords must match')
     })
 
-//     const formik = useFormik({
-//         initialValues:{
-//             username: '',
-//             email: '',
-//             password: '',
-//             passwordConfirmation: ''
-//         },
-//         validationSchema: signupSchema,
-//         onSubmit: async (values, {resetForm}) => {
-//             try {
-//                 const response = await fetch('/users', {
-//                 method: 'POST',
-//                 headers: {
-//                     'Content-Type': 'application/json'
-//                 },
-//                 body: JSON.stringify(values)
-//             });
-            
-//             if (response.ok) {
-//                 const {user} = await response.json();
-//                 setUser(user);
-//                 resetForm({values: ''})
-//                 navigate('/home');
-//             } else {
-//                 console.error('Error:', response.status);
-//                 const errorData = await response.json();
-//                 console.error('Error Data:', errorData);
-//             }
-//         } catch (error) {
-//             console.error('Request failed:', error.message);
-//         }
-//     },
-// });    
-
 const formik = useFormik({
     initialValues: {
         name: '',

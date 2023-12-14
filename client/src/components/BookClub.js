@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useOutletContext } from "react-router-dom"
 import { Typography, Button, Container, Paper, Card, CardContent, CardMedia, Grid } from '@mui/material';
 import { Link } from 'react-router-dom';
@@ -12,44 +12,37 @@ function BookClub(){
     const {club} = useContext(ClubContext)
     const {user, setUser} = useContext(UserContext)
 
-    const handleJoinClub = async (clubId) => {
-        const url = '/users';  // Adjust the URL based on your actual API endpoint
-    
-        try {
-          const response = await fetch(url, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              user_id: user.id,  // Assuming you have the user ID available in the user context
-              bookclub_id: clubId,
-            }),
-          });
-    
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-    
-          const data = await response.json();
-          console.log(data.message);  // or perform any other actions
-        } catch (error) {
-          console.error('Error:', error);
-        }
-      };
 
-    if (!club) {
-        return <p>Loading...</p>; 
-      }
+    const handleJoinClub = async (clubId) => {
+        try {
+            const response = await fetch(`/join/bookclub/${clubId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(club)
+            });
+
+            if (response.ok) {
+                const updatedUserResponse = await fetch('/authorized');
+                const updatedUserData = await updatedUserResponse.json();
+                setUser(updatedUserData);
+                console.log('Successfully joined the club!');
+            } else {
+                const errorData = await response.json();
+                console.error('Error joining club:', errorData);
+                alert('Error joining the club. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error joining club:', error);
+            alert('An error occurred while joining the club. Please try again later.');
+        }
+    };
+
      
     
     const clubArray = Object.values(club);
  
-    // clubArray.forEach((clubData)=> {
-    //     console.log(clubData.id);
-    // });
-
-
 
     return (
         <Container maxWidth="md" sx={{ marginTop: '2rem' }}>

@@ -29,27 +29,7 @@ class Users(Resource):
         return make_response({'user': user.to_dict()}, 201 )
 
 
-    # def put(self):
-    #     # Assuming you have a user_id in the request data
-    #     data = request.get_json()
-    #     user_id = data.get('user_id')
-    #     user = User.query.get(user_id)
 
-    #     if not user:
-    #         return make_response({'error': 'User not found'}, 404)
-
-    #     # Assuming you also have a bookclub_id in the request data
-    #     bookclub_id = data.get('bookclub_id')
-    #     bookclub = BookClub.query.get(bookclub_id)
-
-    #     if not bookclub:
-    #         return make_response({'error': 'Book club not found'}, 404)
-
-    #     # Associate the user with the book club
-    #     user.bookclub = bookclub
-    #     db.session.commit()
-
-    #     return make_response({'message': 'User joined the book club successfully'}, 200)
 
 api.add_resource(Users, '/users')  
 
@@ -83,19 +63,6 @@ def login():
     except:
         return make_response({'error': 'username incorrect'}, 401)
 
-@app.route('/users', methods= ['PUT'])
-def join_book_club():
-    data = request.get_json()
-
-    user_id = data.get('user_id')
-    bookclub_id = data.get('bookclub_id')
-
-    user = User.query.get(user_id)
-    user.bookclub_id = bookclub_id
-
-    db.session.commit()
-
-    return jsonify({'message': 'User joined the book club successfully'}), 200
 
 
 class BookClubs(Resource):
@@ -114,7 +81,56 @@ class BookClubs(Resource):
 api.add_resource(BookClubs, '/clubs')  
 
 
+class UserBookClub(Resource):
+    def get(self, user_id):
+        try:
+            user= User.query.get(user_id)
+            if user:
+                if user.bookclub:
+                    bookclub_data = {
+                        'id': user.bookclub.id,
+                        'club_name': user.bookclub.club_name,
+                        'picture': user.bookclub.picture,
+                        'members': [{'id': member.id, 'name': member.name, 'username': member.username} for member in user.bookclub.users]
+                    }
+                    return make_response(jsonify(bookclub_data), 200)
+                else:
+                    return make_response({'message': 'User is not part of a book club.'})
+            else: 
+                return make_response({'message': 'User not found'}, 404)
+        except Exception as e:
+            return make_response({'error': str(e)}, 500)
 
+api.add_resource(UserBookClub, '/user/bookclub/<int:user_id>')
+
+class JoinBookClub(Resource):
+    def post(self, bookclub_id):
+        try:
+            # Ensure the user is authenticated
+            if 'user_id' not in session:
+                return make_response({'error': 'User not authenticated'}, 401)
+
+            user_id = session['user_id']
+            user = User.query.get(user_id)
+
+            if not user:
+                return make_response({'error': 'User not found'}, 404)
+
+            bookclub = BookClub.query.get(bookclub_id)
+
+            if not bookclub:
+                return make_response({'error': 'Book Club not found'}, 404)
+
+            # Associate the book club with the user
+            user.bookclub = bookclub
+            db.session.commit()
+
+            return make_response({'message': 'User joined the book club successfully'}, 200)
+
+        except Exception as e:
+            return make_response({'error': str(e)}, 500)
+
+api.add_resource(JoinBookClub, '/join/bookclub/<int:bookclub_id>')
 
 
 

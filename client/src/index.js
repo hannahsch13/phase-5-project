@@ -12,7 +12,8 @@ import Homepage from "./components/Homepage"
 import Signup from "./components/Signup";
 import Login from './components/Login';
 import App from "./components/App";
-import ProfileList from "./components/ProfileList"
+import ProfileList from "./components/ProfileList";
+import ClubPage from "./components/ClubPage"
 
 
 
@@ -48,6 +49,10 @@ const router = createBrowserRouter ([
             {
                 path: '/users',
                 element: <ProfileList/>
+            }, 
+            {
+                path: '/mybookclub',   
+                element: <ClubPage />
             }    
         ]
     }
@@ -61,42 +66,3 @@ root.render(
     );
 
 
-// import React from "react";
-// import ReactDOM from "react-dom";
-// import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-// import "./index.css";
-// import { createRoot } from "react-dom/client";
-
-// import App from "././components/BookClub
-// import Homepage from "./components/Homepage";
-// import BookClub from "./components/BookClub";
-// import Profile from "./components/Profile";
-// import BookInfo from "./components/BookInfo";
-
-// const root = createRoot(document.getElementById('root'));
-
-// root.render(
-//   <Router>
-//     <Switch>
-//       <Route path="/" element={<App />} />
-//       <Route path="/home" element={<Homepage />} />
-//       <Route path="/bookclub" element={<BookClub />} />
-//       <Route path="/profile" element={<Profile />} />
-//       <Route path="/book/:id" element={<BookInfo />} />
-//     </Switch>
-//   </Router>
-// );
-
-
-
-
-
-
-
-
-
-
-
-    // const container = document.getElementById("root");
-    // const root = createRoot(container);
-    // root.render(<App />);
