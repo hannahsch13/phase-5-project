@@ -6,11 +6,13 @@ import { Link } from 'react-router-dom';
 import NewClubForm from "./NewClubForm";
 import { ClubContext } from "./App";
 import { UserContext } from "./App";
+import { ClubsContext } from "./App";
 
 
 function BookClub(){ 
     const {club} = useContext(ClubContext)
     const {user, setUser} = useContext(UserContext)
+    const {clubs, setClubs} = useContext(ClubsContext)
 
 
     const handleJoinClub = async (clubId) => {
@@ -41,7 +43,7 @@ function BookClub(){
 
      
     
-    const clubArray = Object.values(club);
+    const clubArray = Object.values(clubs);
  
 
     return (

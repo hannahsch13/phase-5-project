@@ -7,13 +7,14 @@ import { useOutletContext } from "react-router-dom"
 function ProfileList(){ 
 
     const {user} = useOutletContext()
+    const {users}= useOutletContext()
 
 
 if (user === null) {
     return <p>Login or Signup</p>;
 }
 
-const userArray = Object.values(user);
+const userArray = Object.values(users);
 console.log(userArray)
 
 return (

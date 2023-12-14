@@ -11,10 +11,14 @@ import Homepage from "./Homepage";
 
 export const UserContext = createContext();
 export const ClubContext = createContext();
+export const UsersContext = createContext();
+export const ClubsContext = createContext();
 
 function App() {
   const [user, setUser] = useState(null)
+  const [users, setUsers] = useState(null)
   const [club, setClub] = useState('')
+  const [clubs, setClubs] = useState('')
   
 
   useEffect(()=> {
@@ -32,13 +36,13 @@ function App() {
   useEffect(()=> {
     fetch('/users')
     .then((resp)=> resp.json())
-    .then(setUser)
+    .then(setUsers)
   }, []);
 
   useEffect(()=> {
     fetch('/clubs')
     .then((resp)=> resp.json())
-    .then(setClub)
+    .then(setClubs)
   }, []);
 
 
@@ -65,7 +69,11 @@ function App() {
     user, 
     setUser,
     club,
-    setClub
+    setClub,
+    users,
+    setUsers,
+    clubs, 
+    setClubs
   }
 
 // function handleLogout() {
@@ -81,13 +89,17 @@ function App() {
 return (
   <div className='App'>
     <header>
-      <NavBar user={user} setUser={setUser} club={club} setClub={setClub}/>
+      <NavBar user={user} setUser={setUser} club={club} setClub={setClub} users= {users} setUsers={setUsers}/>
     </header>
+    <ClubsContext.Provider value= {{clubs, setClubs}}>
     <ClubContext.Provider value= {{club, setClub}}>
     <UserContext.Provider value= {{user, setUser}}>
+    <UsersContext.Provider value={{users, setUsers}}>
     <Outlet context={context}/>
+    </UsersContext.Provider>
     </UserContext.Provider>
     </ClubContext.Provider>
+    </ClubsContext.Provider>
   </div>
 );
 }
