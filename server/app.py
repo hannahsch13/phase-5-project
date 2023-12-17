@@ -12,7 +12,7 @@ from config import db, api, app
 # Add your model imports
 from models import User
 from models import BookClub
-# from models import Book
+from models import Book
 
 # Views go here!
 
@@ -138,21 +138,21 @@ class JoinBookClub(Resource):
 api.add_resource(JoinBookClub, '/join/bookclub/<int:bookclub_id>')
 
 
-# class Books(Resource):
-#     def get(self):
-#         book_list= [book.to_dict(rules= ('-club_books.book','-bookclub.books', '-bookclub.books.bookclubs')) for book in Book.query.all()]
-#         return make_response(book_list, 200)
+class Books(Resource):
+    def get(self):
+        book_list= [book.to_dict() for book in Book.query.all()]
+        return make_response(book_list, 200)
 
-#     def post(self):
-#         data = request.get_json()
-#         book = Book(title= data['title'], author=data['author'], cover=data['cover'])
-#         db.session.add(book)
-#         db.session.commit()
+    def post(self):
+        data = request.get_json()
+        book = Book(title= data['title'], author=data['author'], cover=data['cover'])
+        db.session.add(book)
+        db.session.commit()
 
-#         return make_response(book.to_dict(), 201)
+        return make_response(book.to_dict(), 201)
 
 
-# api.add_resource(Books, '/books')  
+api.add_resource(Books, '/books')  
 
 
 

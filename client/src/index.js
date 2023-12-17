@@ -14,7 +14,7 @@ import Login from './components/Login';
 import App from "./components/App";
 import ProfileList from "./components/ProfileList";
 import ClubPage from "./components/ClubPage";
-// import Books from "./components/Books"
+import Books from "./components/Books"
 
 
 
@@ -54,11 +54,11 @@ const router = createBrowserRouter ([
             {
                 path: '/mybookclub',   
                 element: <ClubPage />
-            }
-            // {
-            //     path: '/books',
-            //     element: <Books/>
-            // }    
+            },
+            {
+                path: '/books',
+                element: <Books/>
+            }    
         ]
     }
 ]);

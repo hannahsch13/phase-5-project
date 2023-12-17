@@ -60,18 +60,18 @@ class BookClub(db.Model, SerializerMixin):
     # club_books = db.relationship('ClubBook', back_populates = 'bookclub', cascade = 'all,delete-orphan')
 
 
-# class Book(db.Model, SerializerMixin):
-#     __tablename__ = 'books'
+class Book(db.Model, SerializerMixin):
+    __tablename__ = 'books'
 
-#     # serialize_rules = ()
+    # serialize_rules = ()
 
-#     id = db.Column(db.Integer, primary_key= True)
-#     title = db.Column(db.String, unique= True, nullable= False)
-#     author = db.Column(db.String)
-#     cover = db.Column(db.String)
+    id = db.Column(db.Integer, primary_key= True)
+    title = db.Column(db.String, unique= True, nullable= False)
+    author = db.Column(db.String)
+    cover = db.Column(db.String)
 
 
-#     club_id = db.Column(db.Integer, db.ForeignKey ('bookclubs.id'))
+    club_id = db.Column(db.Integer, db.ForeignKey ('bookclubs.id'))
 
     # bookclubs = association_proxy('club_books', 'bookclubs')
     # bookclubs = db.relationship('BookClub', secondary= 'club_books', back_populates = 'books')
@@ -83,15 +83,15 @@ class BookClub(db.Model, SerializerMixin):
     
 
 
-# class ClubBook(db.Model, SerializerMixin): 
-#     __tablename__ = 'club_books'
+class ClubBook(db.Model, SerializerMixin): 
+    __tablename__ = 'club_books'
 
-#     # serialize_rules = ()
+    # serialize_rules = ()
 
-#     id = db.Column(db.Integer, primary_key=True)
-#     month = db.Column(db.String)
-#     club_id = db.Column(db.Integer, db.ForeignKey('bookclubs.id', ondelete='cascade'))
-#     book_id = db.Column(db.Integer, db.ForeignKey('books.id', ondelete='cascade'))
+    id = db.Column(db.Integer, primary_key=True)
+    month = db.Column(db.String)
+    club_id = db.Column(db.Integer, db.ForeignKey('bookclubs.id', ondelete='cascade'))
+    book_id = db.Column(db.Integer, db.ForeignKey('books.id', ondelete='cascade'))
 
 #     book = db.relationship('Book', back_populates = 'club_books')
 #     bookclub = db.relationship('BookClub', back_populates= 'club_books')
