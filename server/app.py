@@ -22,14 +22,6 @@ class Users(Resource):
         user_list= [user.to_dict() for user in User.query.all()]
         return make_response(user_list, 200)
     
-    # def get(self):
-    #     try:
-    #         user_list = [user.to_dict() for user in User.query.all()]
-    #         logging.info('Retrieved user list successfully.')
-    #         return make_response(user_list, 200)
-    #     except Exception as e:
-    #         logging.exception('Error while retrieving user list: %s', str(e))
-    #         return make_response({'error': 'Internal Server Error'}, 500)
 
     def post(self):
         data = request.get_json()
@@ -39,7 +31,7 @@ class Users(Resource):
         session['user_id'] = user.id
         return make_response({'user': user.to_dict()}, 201 )
 
-# rules= ('-bookclub.users', '-bookclub')
+
 
 
 api.add_resource(Users, '/users')  
@@ -80,14 +72,6 @@ class BookClubs(Resource):
     def get(self):
         club_list= [club.to_dict() for club in BookClub.query.all()]
         return make_response(club_list, 200)
-    # def get(self):
-    #     try:
-    #         club_list = [club.to_dict() for club in BookClub.query.all()]
-    #         logging.info('Retrieved club list successfully.')
-    #         return make_response(club_list, 200)
-    #     except Exception as e:
-    #         logging.exception('Error while retrieving club list: %s', str(e))
-    #         return make_response({'error': 'Internal Server Error'}, 500)
         
     def post(self):
         data = request.get_json()
@@ -169,11 +153,6 @@ api.add_resource(JoinBookClub, '/join/bookclub/<int:bookclub_id>')
 
 
 # api.add_resource(Books, '/books')  
-
-
-
-
-
 
 
 
