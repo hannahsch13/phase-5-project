@@ -6,13 +6,15 @@ import { useOutletContext, useNavigate } from 'react-router-dom'
 import { NavLink } from 'react-router-dom';
 
 import { ClubContext } from './App'
+import { UsersContext } from './App';
 import { UserContext } from './App';
 
 
 function ClubPage() {
     const {club, setClub} = useContext(ClubContext)
-    const {user} = useContext(UserContext)
+    const {users} = useContext(UsersContext)
     const [isLoading, setIsLoading] = useState(true);
+    const {user} = useContext(UserContext)
 
     useEffect(() => {
       const fetchClubDetails = async () => {
@@ -80,6 +82,6 @@ function ClubPage() {
         </Container>
       );
     };
-    
+
     export default ClubPage;
 

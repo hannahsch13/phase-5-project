@@ -1,28 +1,28 @@
-import React, { useContext, useEffect } from "react";
-import { useOutletContext } from "react-router-dom"
-import { Typography, Button, Container, Paper, Card, CardContent, CardMedia, Grid } from '@mui/material';
-import { Link } from 'react-router-dom';
+// import React, { useContext, useEffect } from "react";
+// import { useOutletContext } from "react-router-dom"
+// import { Typography, Button, Container, Paper, Card, CardContent, CardMedia, Grid } from '@mui/material';
+// import { Link } from 'react-router-dom';
 
-import {BooksContext} from "./App"
-import NewBookForm from "./NewBookForm"
-
-
-function Books() {
-    const {books, setBooks}= useContext(BooksContext)
-
-    const booksArray = Object.values(books);
-    console.log(booksArray)
+// import {BooksContext} from "./App"
+// import NewBookForm from "./NewBookForm"
 
 
-    return (
-        <div>
-        <h1>Books</h1>
-        <div>
-            <NewBookForm/>
-        </div>
-        </div> 
-    )
+// function Books() {
+//     const {books, setBooks}= useContext(BooksContext)
 
-};
+//     const booksArray = Object.values(books);
+//     console.log(booksArray)
 
-export default Books; 
+
+//     return (
+//         <div>
+//         <h1>Books</h1>
+//         <div>
+//             <NewBookForm/>
+//         </div>
+//         </div> 
+//     )
+
+// };
+
+// export default Books; 

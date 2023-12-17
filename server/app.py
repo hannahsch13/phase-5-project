@@ -3,6 +3,7 @@
 # Standard library imports
 
 # Remote library imports
+import logging
 from flask import request, make_response, session, jsonify
 from flask_restful import Resource
 from datetime import datetime
@@ -11,7 +12,7 @@ from config import db, api, app
 # Add your model imports
 from models import User
 from models import BookClub
-from models import Book
+# from models import Book
 
 # Views go here!
 
@@ -20,6 +21,15 @@ class Users(Resource):
     def get(self):
         user_list= [user.to_dict() for user in User.query.all()]
         return make_response(user_list, 200)
+    
+    # def get(self):
+    #     try:
+    #         user_list = [user.to_dict() for user in User.query.all()]
+    #         logging.info('Retrieved user list successfully.')
+    #         return make_response(user_list, 200)
+    #     except Exception as e:
+    #         logging.exception('Error while retrieving user list: %s', str(e))
+    #         return make_response({'error': 'Internal Server Error'}, 500)
 
     def post(self):
         data = request.get_json()
@@ -29,7 +39,7 @@ class Users(Resource):
         session['user_id'] = user.id
         return make_response({'user': user.to_dict()}, 201 )
 
-
+# rules= ('-bookclub.users', '-bookclub')
 
 
 api.add_resource(Users, '/users')  
@@ -70,7 +80,15 @@ class BookClubs(Resource):
     def get(self):
         club_list= [club.to_dict() for club in BookClub.query.all()]
         return make_response(club_list, 200)
-
+    # def get(self):
+    #     try:
+    #         club_list = [club.to_dict() for club in BookClub.query.all()]
+    #         logging.info('Retrieved club list successfully.')
+    #         return make_response(club_list, 200)
+    #     except Exception as e:
+    #         logging.exception('Error while retrieving club list: %s', str(e))
+    #         return make_response({'error': 'Internal Server Error'}, 500)
+        
     def post(self):
         data = request.get_json()
         club = BookClub(club_name=data['club_name'], picture=data['picture'])
@@ -80,6 +98,8 @@ class BookClubs(Resource):
         return make_response(club.to_dict(), 201 )
 
 api.add_resource(BookClubs, '/clubs')  
+
+# rules = ('-users.bookclub', '-club_books.bookclub')
 
 
 class UserBookClub(Resource):
@@ -134,21 +154,21 @@ class JoinBookClub(Resource):
 api.add_resource(JoinBookClub, '/join/bookclub/<int:bookclub_id>')
 
 
-class Books(Resource):
-    def get(self):
-        book_list= [book.to_dict() for book in Book.query.all()]
-        return make_response(book_list, 200)
+# class Books(Resource):
+#     def get(self):
+#         book_list= [book.to_dict(rules= ('-club_books.book','-bookclub.books', '-bookclub.books.bookclubs')) for book in Book.query.all()]
+#         return make_response(book_list, 200)
 
-    def post(self):
-        data = request.get_json()
-        book = Book(title= data['title'], author=data['author'], cover=data['cover'])
-        db.session.add(book)
-        db.session.commit()
+#     def post(self):
+#         data = request.get_json()
+#         book = Book(title= data['title'], author=data['author'], cover=data['cover'])
+#         db.session.add(book)
+#         db.session.commit()
 
-        return make_response(book.to_dict(), 201)
+#         return make_response(book.to_dict(), 201)
 
 
-api.add_resource(Books, '/books')  
+# api.add_resource(Books, '/books')  
 
 
 
