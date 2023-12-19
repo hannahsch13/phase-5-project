@@ -45,6 +45,7 @@ function BookClub(){
     
     const clubArray = Object.values(clubs);
     console.log(clubArray)
+ 
 
     return (
         <Container maxWidth="md" sx={{ marginTop: '2rem' }}>

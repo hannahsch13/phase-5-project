@@ -3,16 +3,85 @@ import { useOutletContext } from "react-router-dom"
 import { Typography, Button, Container, Paper, Card, CardContent, CardMedia, Grid } from '@mui/material';
 import { Link } from 'react-router-dom';
 
-import {BooksContext, UserContext} from "./App"
+import {ClubBooksContext, UserContext, BooksContext, CurrentClubContext} from "./App"
 import NewBookForm from "./NewBookForm"
 
 
 function Books() {
-    const {books, setBooks}= useContext(BooksContext)
+    const {clubBooks, setClubBooks}= useContext(ClubBooksContext)
     const {user} = useContext(UserContext)
+    const {currentClub, setCurrentClub} = useContext(CurrentClubContext)
+    const {books, setBooks} = useContext(BooksContext)
+
 
     const booksArray = Object.values(books);
-    console.log(booksArray)
+    console.log(books)
+
+    // const handleAddBook = () => {
+    //     const formData = {
+    //       club_id: user.bookclub_id,
+    //       book_id: '1', // Replace with the actual book_id
+    //       month: 'January', 
+    //     };
+    
+        
+    //     fetch('/add_book_to_club', {
+    //       method: 'POST',
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //       },
+    //       body: JSON.stringify(formData),
+    //     })
+    //       .then((response) => response.json())
+    //       .then((data) => {
+    //         console.log(data);
+    //         // Handle success or display a success message to the user
+    //       })
+    //       .catch((error) => {
+    //         console.error('Error:', error);
+    //         // Handle error or display an error message to the user
+    //       });
+    //   };
+    // useEffect(() => {
+    //     // Fetch books for the current club when the component mounts or when the currentClub changes
+    //     if (currentClub) {
+    //         fetch(`/get_books_by_club/${books.club_id}`)
+    //             .then((response) => response.json())
+    //             .then((data) => {
+    //                 setClubBooks(data.clubBooks);
+    //             })
+    //             .catch((error) => {
+    //                 console.error('Error fetching books:', error);
+    //             });
+    //     }
+    // }, [currentClub, setClubBooks]);
+
+    // const handleAddBook = (bookId) => {
+    //     const formData = {
+    //         club_id: user.bookclub_id,
+    //         book_id: bookId,
+    //         month: 'January', // Replace with the actual month or get it dynamically
+    //     };
+
+    //     fetch('/add_book_to_club', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify(formData),
+    //     })
+    //         .then((response) => response.json())
+    //         .then((data) => {
+    //             console.log(data);
+    //             // Handle success or display a success message to the user
+    //         })
+    //         .catch((error) => {
+    //             console.error('Error:', error);
+    //             // Handle error or display an error message to the user
+    //         });
+    // };
+
+    
 
 return (
     <Container maxWidth="md" sx={{ marginTop: '2rem' }}>
@@ -35,26 +104,22 @@ return (
                   )}
                   <CardContent>
                     <Typography variant="h6" component="div">
-                      {booksData.title}
+                      {booksData.title} 
                     </Typography>
-                    {user && (
-                        <Button >
-                            Add book to club
-                        </Button>
-                    )}
+                    <Typography variant="h6" component="div">
+                    {booksData.bookclubs.club_name}
+                    </Typography>
                   </CardContent>
                 </Card>
               </Grid>
             ) : null
           )}
         </Grid>
-        <div style={{ marginTop: '2rem' }}>
-          <NewBookForm />
-        </div>
       </Paper>
     </Container>
   );
 }
+
 
 export default Books; 
 

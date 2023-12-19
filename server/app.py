@@ -13,6 +13,7 @@ from config import db, api, app
 from models import User
 from models import BookClub
 from models import Book
+from models import ClubBook
 
 # Views go here!
 
@@ -75,7 +76,7 @@ class BookClubs(Resource):
         
     def post(self):
         data = request.get_json()
-        club = BookClub(club_name=data['club_name'], picture=data['picture'])
+        club = BookClub(club_name=data['club_name'], picture=data['picture'], books = data['books'])
         db.session.add(club)
         db.session.commit()
         # session['user_id'] = user.id
@@ -96,7 +97,8 @@ class UserBookClub(Resource):
                         'id': user.bookclub.id,
                         'club_name': user.bookclub.club_name,
                         'picture': user.bookclub.picture,
-                        'members': [{'id': member.id, 'name': member.name, 'username': member.username} for member in user.bookclub.users]
+                        'members': [{'id': member.id, 'name': member.name, 'username': member.username} for member in user.bookclub.users],
+                        'books': [{'id': book.id, 'title': book.title, 'author': book.author, 'cover': book.cover} for book in user.bookclub.books]
                     }
                     return make_response(jsonify(bookclub_data), 200)
                 else:
@@ -153,6 +155,138 @@ class Books(Resource):
 
 
 api.add_resource(Books, '/books')  
+
+
+@app.route('/add_book_to_club/<int:user_id>/<int:club_id>', methods=['POST'])
+# def add_book_to_club(user_id, book_id):
+def add_book_to_club(user_id, club_id):
+    try:
+        user = User.query.get_or_404(user_id)
+        club = BookClub.query.get_or_404(club_id)
+
+        # Extract book information from the request
+        book_data = request.get_json()
+
+        # Create a new book instance and add it to the club
+        new_book = Book(title=book_data['title'], author=book_data['author'], cover=book_data['cover'])
+        club.books.append(new_book)
+
+        db.session.commit()
+
+        return jsonify({'message': 'Book added to the club successfully'}), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+    # try:
+    #     user = User.query.get_or_404(user_id)
+    #     book = Book.query.get_or_404(book_id)
+
+    #     # Check if the user is associated with a book club
+    #     if user.bookclub is None:
+    #         return jsonify({'error': 'User is not associated with a book club'}), 400
+
+    #     # Check if the book is already associated with the user's club
+    #     if book in user.bookclub.books:
+    #         return jsonify({'error': 'Book is already in the user\'s club'}), 400
+
+    #     club_book = ClubBook(month='January', )  # Adjust as needed
+    #     club_book.book_id = book
+    #     user.bookclub.books.append(book)
+
+        
+    #     # Add the book to the Books table
+    #     db.session.add(book)
+
+    #     # Commit changes to the database
+    #     db.session.commit()
+
+    #     return jsonify({'message': 'Book added to the user\'s club successfully'}), 200    
+
+    # except Exception as e:
+    #     return jsonify({'error': str(e)}), 500
+    
+
+
+@app.route('/get_books_by_club/<int:club_id>', methods=['GET'])
+def get_books_by_club(club_id):
+    try:
+        # Retrieve books for the specified club_id
+        books = Book.query.filter_by(club_id=club_id).all()
+
+        # Serialize the books
+        serialized_books = [book.serialize() for book in books]
+
+        return jsonify({'books': serialized_books}), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500        
+
+
+
+# class JoinBookClub(Resource):
+#     def post(self, bookclub_id):
+#         try:
+#             # Ensure the user is authenticated
+#             if 'user_id' not in session:
+#                 return make_response({'error': 'User not authenticated'}, 401)
+
+#             user_id = session['user_id']
+#             user = User.query.get(user_id)
+
+#             if not user:
+#                 return make_response({'error': 'User not found'}, 404)
+
+#             bookclub = BookClub.query.get(bookclub_id)
+
+#             if not bookclub:
+#                 return make_response({'error': 'Book Club not found'}, 404)
+
+#             # Associate the book club with the user
+#             user.bookclub = bookclub
+#             db.session.commit()
+
+#             return make_response({'message': 'User joined the book club successfully'}, 200)
+
+#         except Exception as e:
+#             return make_response({'error': str(e)}, 500)
+
+# api.add_resource(JoinBookClub, '/join/bookclub/<int:bookclub_id>')
+
+
+
+
+
+
+# @app.route('/add_book_to_club', methods=['POST'])
+# def add_book_to_club():
+#     try:
+#         # Get data from the request
+#         data = request.json
+#         club_id = data.get('club_id')
+#         book_id = data.get('book_id')
+#         month = data.get('month')
+
+#         # Check if the club and book exist
+#         club = BookClub.query.get(club_id)
+#         book = Book.query.get(book_id)
+
+#         if not club or not book:
+#             return jsonify({'error': 'Club or book not found'}), 404
+
+#         # Create a new ClubBook instance
+#         new_club_book = ClubBook(month=month, book=book, bookclub=club)
+
+#         # Add the new club_book to the session and commit the changes to the database
+#         db.session.add(new_club_book)
+#         db.session.commit()
+
+#         return jsonify({'message': 'Book added to club_books successfully'}), 201
+
+#     except Exception as e:
+#         return jsonify({'error': str(e)}), 500
+
+
 
 
 

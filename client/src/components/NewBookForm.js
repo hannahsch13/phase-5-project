@@ -5,64 +5,107 @@ import {useState, useContext, useEffect} from 'react'
 import { useOutletContext, useNavigate } from 'react-router-dom'
 import { NavLink } from 'react-router-dom';
 
-import { BooksContext } from './App';
+import { ClubBooksContext } from './App';
 import { UserContext } from './App';
+// import { CurrentClubContext } from './App';
+import { BooksContext } from './App';
+import { ClubContext } from './App';
 
 
 
 function NewBookForm() {
-    const {setBooks} = useContext(BooksContext)
+    const {clubBooks,setClubBooks} = useContext(ClubBooksContext)
+    const {books, setBooks} = useContext(BooksContext)
     const {user} = useContext(UserContext)
     const navigate = useNavigate()
+    // const {currentClub, setCurrentClub} = useContext(CurrentClubContext)
+    const {club, setClub} = useContext(ClubContext)
 
-    const newBookSchema = Yup.object().shape({
-        title: Yup.string().required('Book titles required!'),
-        author: Yup.string().required('Author required!'),
-        cover: Yup.string()
-    })
+    const [currentClub, setCurrentClub] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
 
-    const formik = useFormik({
-        initialValues: {
-            title: '',
-            author: '',
-            cover: ''
-        },
-        validationSchema: newBookSchema,
-        onSubmit: (values, {resetForm}) => {
-            fetch('/books', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(values)
-            })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    console.error('Error:', response.status);
-                    return response.json().then(errorData => {
-                        console.error('Error Data:', errorData);
-                        throw new Error('Request failed');
-                    });
-                }
-            }) 
-            .then(({ books }) => {
-                setBooks(books);
-                resetForm({ values: '' });
-                navigate('/home');
-            })
-            .catch(error => {
-                console.error('Request failed:', error.message);
-            });
-        },
-    });
+
+
+
+console.log(club)
+useEffect(() => {
+    const fetchClubDetails = async () => {
+      try {
+        if (user) {
+          const response = await fetch(`/user/bookclub/${user.id}`);
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+
+          const data = await response.json();
+          setClub(data);
+        }
+      } catch (error) {
+        console.error('Error fetching club details:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchClubDetails();
+  }, [user, setClub]);
+
+  const newBookSchema = Yup.object().shape({
+    title: Yup.string().required('Book titles required!'),
+    author: Yup.string().required('Author required!'),
+    cover: Yup.string(),
+  });
+
+const formik = useFormik({
+    initialValues: {
+      title: '',
+      author: '',
+      cover: '',
+    },
+    validationSchema: newBookSchema,
+    onSubmit: async (values, { resetForm }) => {
+      try {
+        const requestBody = {
+          ...values,
+
+          club_id: club.id,
+        };
+
+        const response = await fetch(`/add_book_to_club/${user.id}/${club.id}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestBody),
+        });
+
+        if (!response.ok) {
+          console.error('Error:', response.status);
+          const errorData = await response.json();
+          console.error('Error Data:', errorData);
+          throw new Error('Request failed');
+        }
+
+        const { message } = await response.json();
+        console.log(message);
+
+        setClubBooks([...clubBooks, values]); 
+
+        resetForm({ values: '' });
+        navigate('/home');
+      } catch (error) {
+        console.error('Request failed:', error.message);
+      }
+    },
+  });
+
+
     return (
     
         <Box>
             {user && (
             <Typography variant="h5" gutterBottom className= "formTitle">
-            Add a book to our collection!
+            Add a book to the club collection!
           </Typography>
             )}
           {user && (

@@ -7,12 +7,15 @@ import {Button} from "@mui/material";
 import Signup from "./Signup";
 import NavBar from "./NavBar";
 import Homepage from "./Homepage";
+import { create } from "@mui/material/styles/createTransitions";
 
 
 export const UserContext = createContext();
 export const ClubContext = createContext();
 export const UsersContext = createContext();
 export const ClubsContext = createContext();
+export const ClubBooksContext = createContext();
+export const CurrentClubContext = createContext();
 export const BooksContext = createContext();
 
 function App() {
@@ -20,6 +23,8 @@ function App() {
   const [users, setUsers] = useState(null)
   const [club, setClub] = useState('')
   const [clubs, setClubs] = useState('')
+  const [clubBooks, setClubBooks] = useState('')
+  const [currentClub, setCurrentClub] = useState('')
   const [books, setBooks] = useState('')
 
   useEffect(()=> {
@@ -53,24 +58,13 @@ function App() {
   },[]);
 
 
-  // useEffect(() => {
-  //   fetch('/clubs')
-  //   .then((resp)=> resp.json())
-  //   .then(setClub)
-  // }, [])
 
-  // useEffect(() => {
-  //   const fetchData= async () => {
-  //     try {
-  //       const response= await fetch('/users');
-  //       const data = await response.json();
-  //       setUser(data);
-  //     } catch (error) {
-  //       console.error('Error fetching user data:', error);
-  //     }  
-  //   };
-  //   fetchData();
-  // }, []);
+ 
+
+  console.log(user)
+
+
+
 
   const context = {
     user, 
@@ -81,6 +75,10 @@ function App() {
     setUsers,
     clubs, 
     setClubs,
+    clubBooks,
+    setClubBooks,
+    currentClub,
+    setCurrentClub,
     books,
     setBooks
   }
@@ -98,9 +96,11 @@ function App() {
 return (
   <div className='App'>
     <header>
-      <NavBar user={user} setUser={setUser} club={club} setClub={setClub} users= {users} setUsers={setUsers}/>
+      <NavBar user={user} setUser={setUser} club={club} setClub={setClub} users= {users} setUsers={setUsers} clubBooks={clubBooks} setClubBooks= {setClubBooks}/>
     </header>
-    <BooksContext.Provider value = {{books, setBooks}}>
+    <BooksContext.Provider value ={{books, setBooks}}>
+    <CurrentClubContext.Provider value = {{currentClub, setCurrentClub}}>
+    <ClubBooksContext.Provider value = {{clubBooks, setClubBooks}}>
     <ClubsContext.Provider value= {{clubs, setClubs}}>
     <ClubContext.Provider value= {{club, setClub}}>
     <UserContext.Provider value= {{user, setUser}}>
@@ -110,6 +110,8 @@ return (
     </UserContext.Provider>
     </ClubContext.Provider>
     </ClubsContext.Provider>
+    </ClubBooksContext.Provider>
+    </CurrentClubContext.Provider>
     </BooksContext.Provider>
   </div>
 );

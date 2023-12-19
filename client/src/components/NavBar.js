@@ -2,7 +2,7 @@ import {Button} from '@mui/material'
 import {NavLink} from 'react-router-dom'
 
 
-function NavBar({user, setUser, club, setClub}){ 
+function NavBar({user, setUser, club, setClub, books, setBooks}){ 
     
     function handleLogout() {
         fetch('/logout', {
@@ -45,6 +45,12 @@ function NavBar({user, setUser, club, setClub}){
                   Users
                 </NavLink>
               </Button>
+              <Button>
+                <NavLink to="/books" className="nav-link">
+                  Books
+                </NavLink>
+              </Button>
+              
               <Button>
                 <NavLink to="/mybookclub" className="nav-link">
                   My Book Club
