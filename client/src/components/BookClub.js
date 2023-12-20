@@ -7,6 +7,7 @@ import NewClubForm from "./NewClubForm";
 import { ClubContext } from "./App";
 import { UserContext } from "./App";
 import { ClubsContext } from "./App";
+import { fontFamily } from "@mui/system";
 
 
 function BookClub(){ 
@@ -49,8 +50,8 @@ function BookClub(){
 
     return (
         <Container maxWidth="md" sx={{ marginTop: '2rem' }}>
-          <Paper elevation={3} sx={{ padding: '2rem' }}>
-            <Typography variant="h4" gutterBottom>
+          <Paper elevation={3} sx={{ padding: '2rem' }} style={{ backgroundColor: '#FDF0D5' }}>
+            <Typography variant="h2" gutterBottom style={{ fontFamily: 'Bokor', textAlign: 'center', color: '#40531B' }}>
               Book Clubs
             </Typography>
             <Grid container spacing={2}>
@@ -67,11 +68,11 @@ function BookClub(){
                         />
                       )}
                       <CardContent>
-                        <Typography variant="h6" component="div">
+                        <Typography variant="h6" component="div" style={{ fontFamily: 'Alice' }}>
                           {clubData.club_name}
                         </Typography>
                         {user && (
-                            <Button onClick= {() => handleJoinClub(clubData.id)}>
+                            <Button onClick= {() => handleJoinClub(clubData.id)} style={{ fontFamily: 'PT Serif' }}>
                                 Join Club
                             </Button>
                         )}

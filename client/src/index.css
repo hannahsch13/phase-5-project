@@ -38,7 +38,7 @@
 
 
 body {
-  background-color: #FFF3B0;
+  background-color: #D6E2EB;
 }
 
 .form {
@@ -64,7 +64,6 @@ body {
 
 .paper {
   padding: 2rem;
-  background-color: #CA895F;
 }
 
 .buttonContainer {
@@ -89,9 +88,21 @@ body {
 }
 
 .form .MuiTypography-h4 {
-  color: #35605A;
+  color: #40531B;
 }
 
 .form .MuiTypography-body1 {
-  color: #5E4955;
+  color: #331832;
+}
+
+.nav-link {
+  font-family: 'Rakkas';
+  font-weight: bold;
+  color: #371A37;
+}
+
+.button {
+  font-family: 'Rakkas';
+  font-weight: bold;
+  color: #371A37; 
 }

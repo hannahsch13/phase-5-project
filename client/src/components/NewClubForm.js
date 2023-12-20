@@ -70,7 +70,7 @@ return (
             {formik.touched.club_name && formik.errors.club_name && <Typography color="error">{formik.errors.club_name}</Typography>}
             <TextField id="picture" label= 'Picture' variant='outlined' required  value={formik.values.picture} onChange={formik.handleChange} onBlur = {formik.handleBlur}/>
             {formik.touched.picture && formik.errors.picture && <Typography color="error">{formik.errors.picture}</Typography>}
-        <Button variant= "contained" type="submit"> Submit</Button>
+        <Button variant= "contained" type="submit" style={{ borderColor: '#32021F', color: '#FDF0D5', backgroundColor: '#371A37' , fontFamily: 'PT Serif'}}> Submit</Button>
         </form>
       )}
     </Box>

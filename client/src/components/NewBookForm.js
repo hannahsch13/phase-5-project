@@ -116,7 +116,7 @@ const formik = useFormik({
                 {formik.touched.author && formik.errors.author && <Typography color="error">{formik.errors.author}</Typography>}
                 <TextField id="cover" label= 'Cover' variant='outlined' required  value={formik.values.cover} onChange={formik.handleChange} onBlur = {formik.handleBlur}/>
                 {formik.touched.cover && formik.errors.cover && <Typography color="error">{formik.errors.cover}</Typography>}
-            <Button variant= "contained" type="submit"> Submit</Button>
+            <Button variant= "contained" type="submit" style={{ borderColor: '#32021F', color: '#FDF0D5', backgroundColor: '#371A37' , fontFamily: 'PT Serif'}}> Submit</Button>
             </form>
           )}
         </Box>

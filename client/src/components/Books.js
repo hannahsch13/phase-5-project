@@ -20,7 +20,7 @@ function Books() {
     // const handleAddBook = () => {
     //     const formData = {
     //       club_id: user.bookclub_id,
-    //       book_id: '1', // Replace with the actual book_id
+    //       book_id: '1', 
     //       month: 'January', 
     //     };
     
@@ -43,7 +43,7 @@ function Books() {
     //       });
     //   };
     // useEffect(() => {
-    //     // Fetch books for the current club when the component mounts or when the currentClub changes
+    //
     //     if (currentClub) {
     //         fetch(`/get_books_by_club/${books.club_id}`)
     //             .then((response) => response.json())
@@ -60,8 +60,7 @@ function Books() {
     //     const formData = {
     //         club_id: user.bookclub_id,
     //         book_id: bookId,
-    //         month: 'January', // Replace with the actual month or get it dynamically
-    //     };
+    //         month: 'January', 
 
     //     fetch('/add_book_to_club', {
     //         method: 'POST',
@@ -73,11 +72,9 @@ function Books() {
     //         .then((response) => response.json())
     //         .then((data) => {
     //             console.log(data);
-    //             // Handle success or display a success message to the user
     //         })
     //         .catch((error) => {
     //             console.error('Error:', error);
-    //             // Handle error or display an error message to the user
     //         });
     // };
 
@@ -85,8 +82,8 @@ function Books() {
 
 return (
     <Container maxWidth="md" sx={{ marginTop: '2rem' }}>
-      <Paper elevation={3} sx={{ padding: '2rem' }}>
-        <Typography variant="h4" gutterBottom>
+      <Paper elevation={3} sx={{ padding: '2rem' }} style={{ backgroundColor: '#FDF0D5' }}>
+        <Typography variant="h3" gutterBottom style={{ fontFamily: 'Bokor', textAlign: 'center', color: '#40531B'}}>
           What our Book Clubs are reading!
         </Typography>
         <Grid container spacing={2}>
@@ -103,10 +100,10 @@ return (
                     />
                   )}
                   <CardContent>
-                    <Typography variant="h6" component="div">
+                    <Typography variant="h6" component="div" style={{ fontFamily: 'Alice', textAlign: 'center', color: '#371A37' }}>
                       {booksData.title} 
                     </Typography>
-                    <Typography variant="h6" component="div">
+                    <Typography variant="h6" component="div" style={{ fontFamily: 'Bokor', color: '#371A37'  }}>
                     {booksData.bookclubs.club_name}
                     </Typography>
                   </CardContent>

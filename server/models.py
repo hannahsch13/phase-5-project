@@ -8,9 +8,9 @@ from config import db, bcrypt
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
 
-    serialize_rules = ('-_password_hash', '-created_at', '-updated_at',  '-role', '-email','-bookclub.users','-bookclub.picture', '-bookclubs.user.bookclub', '-bookclub.id', '-bookclub.club_books', '-bookclub.club_books.id', '-bookclub.club_books.month','-bookclub.club_books.book_id', '-bookclub.club_books.club_id', '-bookclub.club_books.book', '-bookclub.club_books.bookclub')
-    
-
+    # serialize_rules = ('-_password_hash', '-created_at', '-updated_at',  '-role', '-email','-bookclub.picture',  '-bookclub.id', '-bookclub.club_books', '-bookclub.club_books.id', '-bookclub.club_books.month','-bookclub.club_books.book_id', '-bookclub.club_books.club_id', '-bookclub.club_books.book', '-bookclub.club_books.bookclub', '-posts.user_id', '-posts.book_id', '-posts')
+    # serialize_only = ('id', 'username', 'name', 'email', 'bookclub_id', ('bookclub', {'fields': ['id', 'club_name']}), ('posts', {'fields': ['id', 'user_id']}))
+    serialize_rules = ('-_password_hash', '-created_at', '-updated_at',  '-role', '-email', '-posts')
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, unique=True, nullable = False)
@@ -23,9 +23,7 @@ class User(db.Model, SerializerMixin):
     bookclub_id = db.Column(db.Integer, db.ForeignKey('bookclubs.id'))
 
     bookclub = db.relationship('BookClub', back_populates= 'users')
-    # posts = db.relationship('Post', back_populates='users') 
-# '-bookclub.club_books', '-bookclub.club_books.id', '-bookclub.club_books.month','-bookclub.club_books.book_id', '-bookclub.club_books.club_id', '-bookclub.club_books.book', '-bookclub.club_books.bookclub')
-
+    posts = db.relationship('Post', back_populates='user', lazy='dynamic') 
 
 
     @property
@@ -48,14 +46,9 @@ class User(db.Model, SerializerMixin):
 class BookClub(db.Model, SerializerMixin):
     __tablename__ = 'bookclubs'
 
-    # serialize_rules = ('-users.bookclub.picture','-users.email', '-users.bookclub.club_name')
-    # serialize_rules = ('-users.bookclub.picture', '-users.email', '-users.bookclub.club_name', '-club_books.book.users', '-club_books.book.club_books', '-club_books.book.author', '-club_books.book.title', '-club_books.book.cover')
-    # serialize_rules = ('-users.bookclub', '-users.email', '-users.bookclub.users.bookclub', '-users.bookclub.users.email',
-    #                    '-users.bookclub.users.bookclub.users.bookclub', '-users.bookclub.users.bookclub.users.email',
-    #                    '-users.bookclub.users.bookclub.users.bookclub.users.bookclub',  # Continue as needed
-    #                    '-club_books.book.users.bookclub', '-club_books.book.users.email', '-club_books.book.club_books',
-    #                    '-club_books.book.author', '-club_books.book.title', '-club_books.book.cover')
-    serialize_rules = ('-users.bookclub.picture', '-users.email', '-users.bookclub.club_name', '-books')
+    # serialize_rules = ('-users.email', '-users.bookclub.club_name', '-books', '-users')
+    # serialize_only = ('id', 'club_name', 'picture', ('users', {'fields': ['id', 'username', 'name']}), ('books', {'fields': ['id', 'title']}))
+    serialize_rules = ('-users', '-books')
 
     id = db.Column(db.Integer, primary_key= True)
     club_name = db.Column(db.String)
@@ -63,14 +56,13 @@ class BookClub(db.Model, SerializerMixin):
 
     users = db.relationship('User', back_populates= 'bookclub', cascade= 'all, delete-orphan')
     books = db.relationship('Book', secondary ='club_books', back_populates = 'bookclubs')
-    # books = association_proxy('club_books', 'books')
-    # club_books = db.relationship('ClubBook', back_populates = 'bookclub', cascade = 'all,delete-orphan')
-#  '-books', '-users.bookclub.club_books', '-club_books.book', '-club_books.month' )
+
 
 class Book(db.Model, SerializerMixin):
     __tablename__ = 'books'
-
-    # serialize_rules = ()
+    
+    # serialize_only = ('id', 'title', 'author', 'cover', 'club_id' ,('bookclubs', {'fields': ['id', 'club_name']}), ('posts', {'fields': ['id', 'book_id']}))
+    serialize_rules = ('-booksclubs', '-posts')
 
     id = db.Column(db.Integer, primary_key= True)
     title = db.Column(db.String, unique= True, nullable= False)
@@ -80,44 +72,36 @@ class Book(db.Model, SerializerMixin):
 
     club_id = db.Column(db.Integer, db.ForeignKey ('bookclubs.id'))
 
-    # bookclubs = association_proxy('club_books', 'bookclubs')
     bookclubs = db.relationship('BookClub', secondary= 'club_books', back_populates = 'books')
-    # club_books = db.relationship('ClubBook', back_populates='book', cascade = 'all,delete-orphan')
-#     posts = db.relationship('Book', back_populates ='books')
+    posts = db.relationship('Post', back_populates ='book',  lazy='dynamic')
 
-serialize_rules = ('-bookclubs.club_name', '-bookclubs.picture', '-bookclubs.users.name', '-bookclub.users.username','-club_books.bookclub.users', '-club_books.bookclub.club_books.users',)
-
-    # '-club_books.bookclub.users', '-club_books.bookclub.club_books.users', 
+# serialize_rules = ('-bookclubs.club_name', '-bookclubs.picture', '-bookclubs.users.name', '-bookclub.users.username', '-club_books.bookclub.users', '-club_books.bookclub.club_books.users', '-posts', '-bookclubs' )
 
 
 class ClubBook(db.Model, SerializerMixin): 
     __tablename__ = 'club_books'
 
-    # serialize_rules = ('-bookclub.club_name', '-bookclub.picture', '-book.author', '-book.title', '-book.cover', '-bookclub.users', '-books', '-bookclubs', '-book.club_books','-book.club_books.month', '-book.club_books.book_id' '-bookclub.users', '-bookclub.club_books', '-bookclub.club_books.users')
-    # serialize_rules = ('-bookclub.users', '-bookclub.club_books.users', '-book.author', '-book.title', '-book.cover', '-book.club_books')
 
     id = db.Column(db.Integer, primary_key=True)
     month = db.Column(db.String)
     club_id = db.Column(db.Integer, db.ForeignKey('bookclubs.id', ondelete='cascade'))
     book_id = db.Column(db.Integer, db.ForeignKey('books.id', ondelete='cascade'))
 
-    # book = db.relationship('Book', back_populates = 'club_books')
-    # bookclub = db.relationship('BookClub', back_populates= 'club_books')
 
+class Post(db.Model, SerializerMixin):
+    __tablename__ = 'posts'
 
-    # '-bookclub.club_name', 
+    # serialize_rules = ('-title', '-created_at', '-type')
+    # serialize_only = ('id', 'body', 'user_id', 'book_id', ('book', {'fields': ['id', 'club_id']}), ('user', {'fields': ['id', 'username']}))
+    serialize_rules = ()
 
-# class Post(db.Model, SerializerMixin):
-#     __tablename__ = 'posts'
+    id = db.Column(db.Integer, primary_key=True)
+    title= db.Column(db.String)
+    body = db.Column(db.Text)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    type = db.Column(db.String)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    book_id = db.Column(db.Integer, db.ForeignKey('books.id'))
 
-
-#     id = db.Column(db.Integer, primary_key=True)
-#     title= db.Column(db.String)
-#     body = db.Column(db.Text)
-#     created_at = db.Column(db.DateTime, server_default=db.func.now())
-#     type = db.Column(db.String)
-#     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-#     book_id = db.Column(db.Integer, db.ForeignKey('books.id'))
-
-#     user= db.relationship('User', back_populates='posts')
-#     book= db.relationship('Book', back_populates='posts')
+    user= db.relationship('User', back_populates='posts')
+    book= db.relationship('Book', back_populates='posts')
