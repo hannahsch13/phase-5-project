@@ -1,11 +1,12 @@
 import {Button, AppBar, Toolbar, IconButton, Menu, MenuItem, Typography,} from '@mui/material'
 import { NavLink as RouterLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu'
 import React, {useState} from 'react';
-// import { deepOrange, deepPurple } from '@mui/material/colors';
 
 function NavBar({ user, setUser }) {
   const [anchorEl, setAnchorEl] = useState(null);
+  const navigate = useNavigate();
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -24,6 +25,7 @@ function NavBar({ user, setUser }) {
       }
     });
     handleMenuClose();
+    navigate('/home')
   };
 
   return (
@@ -37,6 +39,19 @@ function NavBar({ user, setUser }) {
         >
           <MenuIcon />
         </IconButton>
+        <Typography
+          variant="h4"
+          component="div"
+          sx={{
+            flexGrow: 1,
+            textAlign: '',
+            fontFamily: 'UnifrakturCook',
+            color: '#371A37'
+          }}
+        >
+          StorySync
+        </Typography>
+
         <Menu
           id="nav-menu"
           anchorEl={anchorEl}
@@ -44,15 +59,46 @@ function NavBar({ user, setUser }) {
           onClose={handleMenuClose}
         >
           <MenuItem component={RouterLink} to="/home" onClick={handleMenuClose}>
-            Home
+          <Typography
+                  style={{
+                    fontFamily: 'PT Serif',
+                    color: '#A86538',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  Home
+                </Typography>
           </MenuItem>
           <MenuItem
             component={RouterLink}
             to="/clubs"
             onClick={handleMenuClose}
           >
-            BookClubs
+                <Typography
+                  style={{
+                    fontFamily: 'PT Serif',
+                    color: '#A86538',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  Book Clubs
+                </Typography>
           </MenuItem>
+                    <MenuItem
+                      component={RouterLink}
+                      to="/books"
+                      onClick={handleMenuClose}
+                    >
+                      <Typography
+                        style={{
+                          fontFamily: 'PT Serif',
+                          color: '#A86538',
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        Books
+                      </Typography>
+                    </MenuItem>
           {!user ? (
             <>
               <MenuItem
@@ -60,14 +106,30 @@ function NavBar({ user, setUser }) {
                 to="/login"
                 onClick={handleMenuClose}
               >
-                Login
+                <Typography
+                  style={{
+                    fontFamily: 'PT Serif',
+                    color: '#371A37',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  Login
+                </Typography>
               </MenuItem>
               <MenuItem
                 component={RouterLink}
                 to="/signup"
                 onClick={handleMenuClose}
               >
-                Sign Up
+                <Typography
+                  style={{
+                    fontFamily: 'PT Serif',
+                    color: '#371A37',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  Signup
+                </Typography>
               </MenuItem>
             </>
           ) : (
@@ -77,22 +139,46 @@ function NavBar({ user, setUser }) {
                 to="/users"
                 onClick={handleMenuClose}
               >
-                Users
-              </MenuItem>
-              <MenuItem
-                component={RouterLink}
-                to="/books"
-                onClick={handleMenuClose}
-              >
-                Books
+                <Typography
+                  style={{
+                    fontFamily: 'PT Serif',
+                    color: '#A86538',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  Users
+                </Typography>
               </MenuItem>
               <MenuItem
                 component={RouterLink}
                 to="/mybookclub"
                 onClick={handleMenuClose}
               >
-                My Book Club
+                <Typography
+                  style={{
+                    fontFamily: 'PT Serif',
+                    color: '#A86538',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  My Book Club
+                </Typography>
               </MenuItem>
+              {/* <MenuItem
+                component={RouterLink}
+                to="/profile"
+                onClick={handleMenuClose}
+              >
+                <Typography
+                  style={{
+                    fontFamily: 'PT Serif',
+                    color: '#A86538',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  My Profile
+                </Typography>
+              </MenuItem> */}
               <MenuItem onClick={handleLogout}>
                 <Typography
                   style={{
@@ -114,64 +200,4 @@ function NavBar({ user, setUser }) {
 
 export default NavBar;
 
-    //     fetch('/logout', {
-    //       method: 'DELETE'
-    //     }).then((resp) => {
-    //       if (resp.ok) {
-    //         setUser(null)
-    //       }
-    //     })
-    //   }
-
-
-
-      
-    //   return (
-    //     <div>
-    //       <Button>
-    //         <NavLink to="/home" className="nav-link" >
-    //           Home
-    //         </NavLink>
-    //       </Button>
-    //       <Button>
-    //         <NavLink to="/clubs" className="nav-link">
-    //           BookClubs
-    //         </NavLink>
-    //       </Button>
-    //       {!user ? (
-    //         <>
-    //           <Button>
-    //             <NavLink to="/login" className="nav-link">
-    //               Login
-    //             </NavLink>
-    //           </Button>
-    //           <Button>
-    //             <NavLink to="/signup" className="nav-link">
-    //               Sign Up
-    //             </NavLink>
-    //           </Button>
-    //         </>
-    //       ) : (
-    //         <>
-    //           <Button>
-    //             <NavLink to="/users" className="nav-link">
-    //               Users
-    //             </NavLink>
-    //           </Button>
-    //           <Button>
-    //             <NavLink to="/books" className="nav-link">
-    //               Books
-    //             </NavLink>
-    //           </Button>
-              
-    //           <Button>
-    //             <NavLink to="/mybookclub" className="nav-link">
-    //               My Book Club
-    //             </NavLink>
-    //           </Button>
-    //           <Button onClick={handleLogout} style={{fontFamily: 'PT Serif', color: '#371A37', backgroundColor: '#CEC9A7', fontWeight: 'bold'}}>Logout</Button>
-    //         </>
-    //       )}
-    //     </div>
-    //   );
-    // };
+  

@@ -34,9 +34,67 @@ class Users(Resource):
         return make_response({'user': user.to_dict()}, 201 )
 
 
+api.add_resource(Users, '/users') 
 
 
-api.add_resource(Users, '/users')  
+class UserById(Resource):
+    def get(self, id):
+        user = User.query.get(id)
+        if not user:
+            return make_response({'error': "User not found"}, 404)
+        
+        return jsonify(user.to_dict())
+
+    def delete(self, id):
+        try:
+            user = User.query.get(id)
+
+            if not user:
+                return make_response({'error': "User not found"}, 404)
+
+            if 'user_id' not in session:
+                return make_response({'error': "Unauthorized, you need to log in"}, 401)
+
+            if user.user_id != session['user_id']:
+                return make_response({'error': "Unauthorized, you don't own this user account"}, 401)
+
+            db.session.delete(user)
+            db.session.commit()
+            return make_response('', 204)
+
+        except Exception as e:
+            print(str(e))
+            return make_response({'error': "Internal Server Error"}, 500)
+        
+
+    def patch(self, id):
+        try:
+            user = User.query.get(id)
+            params = request.json
+
+            if not user:
+                return make_response({'error': "User not found"}, 404)
+
+            if 'user_id' not in session:
+                return make_response({'error': "Unauthorized, you need to log in"}, 401)
+
+            if user.user_id != session['user_id']:
+                return make_response({'error': "Unauthorized, you don't own this user account"}, 401)
+
+            for attr in params:
+                try:
+                    setattr(user, attr, params[attr])
+                except ValueError as validation_error:
+                    return make_response({'error': str(validation_error)}, 422)
+
+            db.session.commit()
+            return jsonify(user.to_dict())
+
+        except Exception as e:
+            print(str(e))
+            return make_response({'error': "Internal Server Error"}, 500)
+
+api.add_resource(UserById, '/user/<int:id>')
 
 
 
@@ -129,7 +187,6 @@ class JoinBookClub(Resource):
             if not bookclub:
                 return make_response({'error': 'Book Club not found'}, 404)
 
-            # Associate the book club with the user
             user.bookclub = bookclub
             db.session.commit()
 
@@ -181,6 +238,7 @@ api.add_resource(Posts, '/posts')
 class PostsByBookId(Resource):
     def get(self, book_id): 
         try:
+
             posts = Post.query.filter_by(book_id=book_id).all()
 
             posts_data = [
@@ -198,24 +256,52 @@ api.add_resource(PostsByBookId, '/posts/<int:book_id>')
 class PostById(Resource):
         
     def delete(self, id):
-        post = Post.query.get(id)
-        if not post: return make_response({'error': "Post not found"}, 404)
-        db.session.delete(post)
-        db.session.commit()
-        return make_response('', 204)
+        try:
+            post = Post.query.get(id)
 
+            if not post:
+                return make_response({'error': "Post not found"}, 404)
+
+            if 'user_id' not in session:
+                return make_response({'error': "Unauthorized, you need to log in"}, 401)
+
+            if post.user_id != session['user_id']:
+                return make_response({'error': "Unauthorized, you don't own this post"}, 401)
+
+            db.session.delete(post)
+            db.session.commit()
+            return make_response('', 204)
+
+        except Exception as e:
+            print(str(e))
+            return make_response({'error': "Internal Server Error"}, 500)
+        
     def patch(self, id):
-        post = Post.query.get(id)
-        params= request.json
-        if not post:
-            return make_response({'error' : "Post not found"}, 404)
-        for attr in params:
-            try:
-                setattr(post, attr, params[attr])
-            except ValueError as validation_error:
-                return make_response({'error' : str(validation_error)}, 422)
-        db.session.commit()
-        return make_response(post.to_dict(), 200)
+        try:
+            post = Post.query.get(id)
+            params = request.json
+
+            if not post:
+                return make_response({'error': "Post not found"}, 404)
+
+            if 'user_id' not in session:
+                return make_response({'error': "Unauthorized, you need to log in"}, 401)
+
+            if post.user_id != session['user_id']:
+                return make_response({'error': "Unauthorized, you don't own this post"}, 401)
+
+            for attr in params:
+                try:
+                    setattr(post, attr, params[attr])
+                except ValueError as validation_error:
+                    return make_response({'error': str(validation_error)}, 422)
+
+            db.session.commit()
+            return make_response(post.to_dict(), 200)
+
+        except Exception as e:
+            print(str(e))
+            return make_response({'error': "Internal Server Error"}, 500)
 
 api.add_resource(PostById, '/posts/<int:id>')
 

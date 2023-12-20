@@ -134,14 +134,5 @@ return (
 );
 }
 
-//   if (!user) {
-//     return <Signup setUser={setUser} />
-//   }
-//   return <div>
-//     in the site!
-//     <Button variant= 'contained' onClick= {handleLogout}> Logout</Button>
-//     <Outlet />
-//   </div>
-// }
 
 export default App;

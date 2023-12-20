@@ -62,23 +62,86 @@ const formik = useFormik({
 
 
     return (
-        <Box>
-            {/* {Object.keys(formik.errors).map((key) => <li> {formik.errors[key]}</li>)} */}
-            <form className= "form" onSubmit= {formik.handleSubmit}>
-                <TextField id= 'name' label= "Name" variant= 'outlined' required value= {formik.values.name} onChange={formik.handleChange}  onBlur = {formik.handleBlur}/>
-                {formik.touched.name && formik.errors.name && <Typography color="error">{formik.errors.name}</Typography>}
-                <TextField id= 'username' label= "Username" variant= 'outlined' required value= {formik.values.username} onChange={formik.handleChange}  onBlur = {formik.handleBlur}/>
-                {formik.touched.username && formik.errors.username && <Typography color="error">{formik.errors.username}</Typography>}
-                <TextField id="email" label= 'Email' variant='outlined' required  value={formik.values.email} onChange={formik.handleChange} onBlur = {formik.handleBlur}/>
-                {formik.touched.email && formik.errors.email && <Typography color="error">{formik.errors.email}</Typography>}
-                <TextField id="password" label= 'Password' type= 'password' variant='outlined' required value={formik.values.password} onChange={formik.handleChange} onBlur = {formik.handleBlur}/>
-                {formik.touched.password && formik.errors.password && <Typography color="error">{formik.errors.password}</Typography>}
-                <TextField id="passwordConfirmation" label= 'Confirm Password' type= 'password' variant='outlined' required value={formik.values.passwordConfirmation} onChange={formik.handleChange} onBlur = {formik.handleBlur}/>
-                {formik.touched.passwordConfirmation && formik.errors.passwordConfirmation && (<Typography color="error">{formik.errors.passwordConfirmation}</Typography>)}
-            <Button variant= "contained" type="Submit"> Submit</Button>
-            </form>
-        </Box>
-        )
+        <Box sx={{ backgroundColor: '#FFEFD6', padding: '25px', borderRadius: '25px', marginTop: '15px', marginRight: '50px',  marginLeft: '50px' }}>
+        {/* {Object.keys(formik.errors).map((key) => <li> {formik.errors[key]}</li>)} */}
+        <form className="form" onSubmit={formik.handleSubmit}>
+          <TextField
+            id="name"
+            label="Name"
+            variant="outlined"
+            required
+            value={formik.values.name}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            sx={{ marginBottom: '16px', fontFamily: 'PT Serif' }}
+          />
+          {formik.touched.name && formik.errors.name && (
+            <Typography color="error">{formik.errors.name}</Typography>
+          )}
+          <TextField
+            id="username"
+            label="Username"
+            variant="outlined"
+            required
+            value={formik.values.username}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            sx={{ marginBottom: '16px', fontFamily: 'PT Serif' }}
+          />
+          {formik.touched.username && formik.errors.username && (
+            <Typography color="error">{formik.errors.username}</Typography>
+          )}
+          <TextField
+            id="email"
+            label="Email"
+            variant="outlined"
+            required
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            sx={{ marginBottom: '16px', fontFamily: 'PT Serif' }}
+          />
+          {formik.touched.email && formik.errors.email && (
+            <Typography color="error">{formik.errors.email}</Typography>
+          )}
+          <TextField
+            id="password"
+            label="Password"
+            type="password"
+            variant="outlined"
+            required
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            sx={{ marginBottom: '16px', fontFamily: 'PT Serif' }}
+          />
+          {formik.touched.password && formik.errors.password && (
+            <Typography color="error">{formik.errors.password}</Typography>
+          )}
+          <TextField
+            id="passwordConfirmation"
+            label="Confirm Password"
+            type="password"
+            variant="outlined"
+            required
+            value={formik.values.passwordConfirmation}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            sx={{ marginBottom: '16px', fontFamily: 'PT Serif' }}
+          />
+          {formik.touched.passwordConfirmation && formik.errors.passwordConfirmation && (
+            <Typography color="error">{formik.errors.passwordConfirmation}</Typography>
+          )}
+          <Button
+            variant="contained"
+            type="Submit"
+            sx={{ borderColor: '#32021F', color: '#FDF0D5', backgroundColor: '#371A37', fontFamily: 'PT Serif' }}
+          >
+            Submit
+          </Button>
+        </form>
+      </Box>
+    );
 }
 
 export default Signup;

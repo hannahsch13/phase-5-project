@@ -39,8 +39,9 @@ const PostInput = ({ onSubmit }) => {
         variant="contained"
         color="primary"
         style={{ marginTop: '16px' }}
+        
       >
-        Submit Comment
+        Submit
       </Button>
     </form>
   );

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import { useOutletContext } from "react-router-dom"
+import { useOutletContext,useNavigate } from "react-router-dom"
 import { Typography, Button, Container, Paper, Card, CardContent, CardMedia, Grid } from '@mui/material';
 import { Link } from 'react-router-dom';
 
@@ -14,7 +14,7 @@ function BookClub(){
     const {club} = useContext(ClubContext)
     const {user, setUser} = useContext(UserContext)
     const {clubs, setClubs} = useContext(ClubsContext)
-
+    const navigate = useNavigate();
 
     const handleJoinClub = async (clubId) => {
         try {
@@ -31,6 +31,8 @@ function BookClub(){
                 const updatedUserData = await updatedUserResponse.json();
                 setUser(updatedUserData);
                 console.log('Successfully joined the club!');
+
+                navigate('/mybookclub');
             } else {
                 const errorData = await response.json();
                 console.error('Error joining club:', errorData);
