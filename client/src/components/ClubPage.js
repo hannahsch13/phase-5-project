@@ -7,7 +7,7 @@ import { NavLink } from 'react-router-dom';
 import NewBookForm from './NewBookForm'
 import PostInput from './PostInput';
 
-import { ClubContext } from './App'
+import { ClubContext, PostsContext } from './App'
 import { UsersContext } from './App';
 import { UserContext } from './App';
 
@@ -18,79 +18,19 @@ function ClubPage() {
     const [isLoading, setIsLoading] = useState(true);
     const {user} = useContext(UserContext)
     const [selectedBook, setSelectedBook] = useState(null);
-    const [posts, setPosts] = useState([]);
+    // const [posts, setPosts] = useState([]);
+    const {posts, setPosts} = useContext(PostsContext)
 
-    // console.log(user)
-    // console.log(club)
 
-    // useEffect(() => {
-    //   const fetchClubDetails = async () => {
-    //     try {
-    //       if (user) {
-    //         const response = await fetch(`/user/bookclub/${user.id}`);
-    //         if (!response.ok) {
-    //           throw new Error(`HTTP error! Status: ${response.status}`);
-    //         }
-  
-    //         const data = await response.json();
-    //         setClub(data);
-    //       }
-    //     } catch (error) {
-    //       console.error('Error fetching club details:', error);
-    //     } finally {
-    //       setIsLoading(false);
-    //     }
-    //   };
-  
-    //   fetchClubDetails();
-    // }, [user, setClub]);
-
-  
-    // if (isLoading) {
-    //   return <p>Loading...</p>;
-    // }
-
-    // const handleBookClick = (book) => {
-    //     setSelectedBook(book);
-    //   };
-    
-    // const handlePostsSubmit = async (post) => {
-    //     try {
-    //       const response = await fetch('/posts', {
-    //         method: 'POST',
-    //         headers: {
-    //           'Content-Type': 'application/json',
-    //         },
-    //         body: JSON.stringify({
-    //           body: post,
-    //           user_id: user.id, 
-    //           book_id: selectedBook.id,
-    //         }),
-    //       });
-      
-    //       if (!response.ok) {
-    //         throw new Error('Failed to submit comment');
-    //       }
-    //       console.log('Comment submitted successfully');
-    //     } catch (error) {
-    //       console.error('Error submitting comment:', error);
-    //     }
-    //       console.log(selectedBook)
-    //       const postsResponse = await fetch(`/posts/${selectedBook.id}`);
-    //       if (postsResponse.ok) {
-    //         const postsData = await postsResponse.json();
-    //         setPosts(postsData);
-    //     }
-        // };
-        useEffect(() => {
-            const fetchClubDetails = async () => {
+    useEffect(() => {
+        const fetchClubDetails = async () => {
               try {
                 if (user) {
-                  const response = await fetch(`/user/bookclub/${user.id}`);
+                    const response = await fetch(`/user/bookclub/${user.id}`);
                   if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                   }
-        
+                  
                   const data = await response.json();
                   setClub(data);
                 }
@@ -105,26 +45,26 @@ function ClubPage() {
           }, [user, setClub, setIsLoading]);
         
           // Fetch posts when selectedBook changes
-          useEffect(() => {
-            const fetchPosts = async () => {
-              try {
-                if (selectedBook) {
-                  const postsResponse = await fetch(`/posts/${selectedBook.id}`);
-                  if (postsResponse.ok) {
-                    const postsData = await postsResponse.json();
-                    console.log('Posts data:', postsData);
-                    setPosts(postsData);
-                  } else {
-                    console.error('Failed to fetch posts');
-                  }
-                }
-              } catch (error) {
-                console.error('Error fetching posts:', error);
-              }
-            };
+        //   useEffect(() => {
+        //     const fetchPosts = async () => {
+        //       try {
+        //         if (selectedBook) {
+        //           const postsResponse = await fetch(`/posts/${selectedBook.id}`);
+        //           if (postsResponse.ok) {
+        //             const postsData = await postsResponse.json();
+        //             console.log('Posts data:', postsData);
+        //             setPosts(postsData);
+        //           } else {
+        //             console.error('Failed to fetch posts');
+        //           }
+        //         }
+        //       } catch (error) {
+        //         console.error('Error fetching posts:', error);
+        //       }
+        //     };
         
-            fetchPosts();
-          }, [selectedBook, setPosts]);
+        //     fetchPosts();
+        //   }, [selectedBook, setPosts]);
         
           // Handle book click
           const handleBookClick = (book) => {
@@ -168,14 +108,14 @@ function ClubPage() {
                   }
                 }
               } catch (error) {
-                console.error('Error fetching posts:', error);
+                  console.error('Error fetching posts:', error);
               }
             };
         
             fetchPosts();
           };
-
-          console.log(posts)
+          
+    
 
           const postsArray = Object.values(posts);
           
@@ -262,13 +202,13 @@ function ClubPage() {
                   Discussion notes:
                 </Typography>
                 <List>
-                {postsArray.map((post) => 
-                    post && post.body ? (
-                <ListItem key={post.id || post.body}  alignItems="flex-start">
-                <ListItemText primary={post.body}/>
+              {postsArray
+                .filter((post) => post.book_id === selectedBook.id)
+                .map((post) => (
+                  <ListItem key={post.id || post.body} alignItems="flex-start">
+                    <ListItemText primary={post.body || 'No content'} />
                 </ListItem>
-                    ): null
-                )}
+                    ))}
             </List>
               </div>
             </Card>
@@ -285,3 +225,65 @@ function ClubPage() {
     export default ClubPage;
 
     
+    // console.log(user)
+    // console.log(club)
+
+    // useEffect(() => {
+    //   const fetchClubDetails = async () => {
+    //     try {
+    //       if (user) {
+    //         const response = await fetch(`/user/bookclub/${user.id}`);
+    //         if (!response.ok) {
+    //           throw new Error(`HTTP error! Status: ${response.status}`);
+    //         }
+  
+    //         const data = await response.json();
+    //         setClub(data);
+    //       }
+    //     } catch (error) {
+    //       console.error('Error fetching club details:', error);
+    //     } finally {
+    //       setIsLoading(false);
+    //     }
+    //   };
+  
+    //   fetchClubDetails();
+    // }, [user, setClub]);
+
+  
+    // if (isLoading) {
+    //   return <p>Loading...</p>;
+    // }
+
+    // const handleBookClick = (book) => {
+    //     setSelectedBook(book);
+    //   };
+    
+    // const handlePostsSubmit = async (post) => {
+    //     try {
+    //       const response = await fetch('/posts', {
+    //         method: 'POST',
+    //         headers: {
+    //           'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify({
+    //           body: post,
+    //           user_id: user.id, 
+    //           book_id: selectedBook.id,
+    //         }),
+    //       });
+      
+    //       if (!response.ok) {
+    //         throw new Error('Failed to submit comment');
+    //       }
+    //       console.log('Comment submitted successfully');
+    //     } catch (error) {
+    //       console.error('Error submitting comment:', error);
+    //     }
+    //       console.log(selectedBook)
+    //       const postsResponse = await fetch(`/posts/${selectedBook.id}`);
+    //       if (postsResponse.ok) {
+    //         const postsData = await postsResponse.json();
+    //         setPosts(postsData);
+    //     }
+        // };
