@@ -6,12 +6,30 @@ import {Button} from "@mui/material";
 // import index from './styling/index.css';
 import Signup from "./Signup";
 import NavBar from "./NavBar";
+import Homepage from "./Homepage";
+import { create } from "@mui/material/styles/createTransitions";
 
 
-export const OutletContext = createContext();
+export const UserContext = createContext();
+export const ClubContext = createContext();
+export const UsersContext = createContext();
+export const ClubsContext = createContext();
+export const ClubBooksContext = createContext();
+export const CurrentClubContext = createContext();
+export const BooksContext = createContext();
+export const BookContext = createContext();
+export const PostsContext = createContext();
 
 function App() {
   const [user, setUser] = useState(null)
+  const [users, setUsers] = useState(null)
+  const [club, setClub] = useState('')
+  const [clubs, setClubs] = useState('')
+  const [clubBooks, setClubBooks] = useState('')
+  const [currentClub, setCurrentClub] = useState('')
+  const [books, setBooks] = useState('')
+  const [book, setBook] = useState('')
+  const [posts, setPosts] = useState('')
 
   useEffect(()=> {
     fetch('/authorized')
@@ -24,7 +42,59 @@ function App() {
     })
   }, [])
 
-  const context = {user, setUser}
+
+  useEffect(()=> {
+    fetch('/users')
+    .then((resp)=> resp.json())
+    .then(setUsers)
+  }, []);
+
+  useEffect(()=> {
+    fetch('/clubs')
+    .then((resp)=> resp.json())
+    .then(setClubs)
+  }, []);
+
+  useEffect(()=>{
+    fetch('/books')
+    .then((resp)=> resp.json())
+    .then(setBooks)
+  },[]);
+
+  useEffect(()=>{
+    fetch('/posts')
+    .then((resp)=> resp.json())
+    .then(setPosts)
+  },[]);
+
+
+ 
+
+  console.log(user)
+
+
+
+
+  const context = {
+    user, 
+    setUser,
+    club,
+    setClub,
+    users,
+    setUsers,
+    clubs, 
+    setClubs,
+    clubBooks,
+    setClubBooks,
+    currentClub,
+    setCurrentClub,
+    books,
+    setBooks,
+    book,
+    setBook, 
+    posts,
+    setPosts
+  }
 
 // function handleLogout() {
 //   fetch('/logout', {
@@ -39,23 +109,30 @@ function App() {
 return (
   <div className='App'>
     <header>
-      <NavBar user={user} setUser={setUser}/>
+      <NavBar user={user} setUser={setUser} club={club} setClub={setClub} users= {users} setUsers={setUsers} clubBooks={clubBooks} setClubBooks= {setClubBooks}/>
     </header>
-    <OutletContext.Provider value= {{user, setUser}}>
+    <PostsContext.Provider value = {{posts, setPosts}}>
+    <BookContext.Provider value = {{book, setBook}}>
+    <BooksContext.Provider value ={{books, setBooks}}>
+    <CurrentClubContext.Provider value = {{currentClub, setCurrentClub}}>
+    <ClubBooksContext.Provider value = {{clubBooks, setClubBooks}}>
+    <ClubsContext.Provider value= {{clubs, setClubs}}>
+    <ClubContext.Provider value= {{club, setClub}}>
+    <UserContext.Provider value= {{user, setUser}}>
+    <UsersContext.Provider value={{users, setUsers}}>
     <Outlet context={context}/>
-    </OutletContext.Provider>
+    </UsersContext.Provider>
+    </UserContext.Provider>
+    </ClubContext.Provider>
+    </ClubsContext.Provider>
+    </ClubBooksContext.Provider>
+    </CurrentClubContext.Provider>
+    </BooksContext.Provider>
+    </BookContext.Provider>
+    </PostsContext.Provider>
   </div>
 );
 }
 
-//   if (!user) {
-//     return <Signup setUser={setUser} />
-//   }
-//   return <div>
-//     in the site!
-//     <Button variant= 'contained' onClick= {handleLogout}> Logout</Button>
-//     <Outlet />
-//   </div>
-// }
 
 export default App;

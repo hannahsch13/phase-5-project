@@ -1,5 +1,5 @@
-function BookInfo(){ 
-    return <div> Book info! </div>
-}
+// function BookInfo(){ 
+//     return <div> Book info! </div>
+// }
 
-export default BookInfo;
+// export default BookInfo;

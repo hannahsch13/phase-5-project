@@ -1,7 +1,108 @@
-/* :root {
-  --bg: #282c34;
-  --header: #fff;
-  --link: #61dafb;
-  --text: hsla(0, 0%, 100%, 0.88);
+/* form css
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form .MuiTextField-root {
+  margin: 8px;
+  width: 300px; /* Adjust the width as needed */
+/* }
+
+.form .MuiButton-root {
+  margin: 16px;
 } */
 
+
+/* homepage css */
+
+/* .container {
+  margin-top: 2rem;
+}
+
+.paper {
+  padding: 2rem;
+}
+
+.buttonContainer {
+  margin-right: 1rem;
+} */
+
+/* new club form  */
+
+/* .formTitle {
+  text-align: center;
+} */ 
+
+
+body {
+  background-color: #D6E2EB;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form .MuiTextField-root {
+  margin: 8px;
+  width: 300px; /* Adjust the width as needed */
+}
+
+.form .MuiButton-root {
+  margin: 16px;
+}
+
+/* homepage css */
+
+.container {
+  margin-top: 2rem;
+}
+
+.paper {
+  padding: 2rem;
+}
+
+.buttonContainer {
+  margin-right: 1rem;
+}
+
+/* new club form  */
+
+.formTitle {
+  text-align: center;
+}
+
+/* Additional styling for specific elements */
+
+.form .MuiButton-containedPrimary {
+  background-color: #CA895F;
+}
+
+.form .MuiButton-outlinedPrimary {
+  border-color: #32021F;
+  color: #32021F;
+}
+
+.form .MuiTypography-h4 {
+  color: #40531B;
+}
+
+.form .MuiTypography-body1 {
+  color: #331832;
+}
+
+.nav-link {
+  font-family: 'Rakkas';
+  font-weight: bold;
+  color: #371A37;
+}
+
+.button {
+  font-family: 'Rakkas';
+  font-weight: bold;
+  color: #371A37; 
+}
