@@ -9,6 +9,7 @@ import {UserContext} from './App'
 function Login() {
     const {setUser} = useContext(UserContext)
     const navigate = useNavigate()
+    const [errorMessage, setErrorMessage] = useState('');
 
     const loginSchema = Yup.object().shape({
         username: Yup.string().required('Username required!'),
@@ -37,14 +38,17 @@ function Login() {
                         setUser(user)
                         console.log(user)
                         navigate('/home')
-                        //navigate into site
                     })
                 } else {
-                    console.log('error fetching user')
-                }
-            })
-        }
-    })
+                    throw new Error('Invalid username or password');
+                    }
+                })
+                .catch((error) => {
+                console.error('Login error:', error);
+                setErrorMessage('Invalid username or password');
+                });
+             },
+         });
 
 
     return (
@@ -78,6 +82,7 @@ function Login() {
           {formik.touched.password && formik.errors.password && (
             <Typography color="error">{formik.errors.password}</Typography>
           )}
+            {errorMessage && <Typography color="error">{errorMessage}</Typography>}
           <Button variant="contained" type="Submit" sx={{ fontFamily: 'PT Serif', backgroundColor: '#371A37', color: '#FDF0D5', borderColor: '#32021F' }}>
             Submit
           </Button>

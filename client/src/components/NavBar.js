@@ -2,6 +2,7 @@ import {Button, AppBar, Toolbar, IconButton, Menu, MenuItem, Typography,} from '
 import { NavLink as RouterLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu'
+import { AccountBox } from '@mui/icons-material';
 import React, {useState} from 'react';
 
 function NavBar({ user, setUser }) {
@@ -31,6 +32,13 @@ function NavBar({ user, setUser }) {
     fontFamily: 'PT Serif',
     fontWeight: 'bold',
   };
+  const logoutStyle = {
+    fontFamily: 'PT Serif',
+    fontWeight: 'bold',
+    color: '#CA895F'
+
+  };
+
 
   return (
     <AppBar position="static" color="default">
@@ -73,28 +81,49 @@ function NavBar({ user, setUser }) {
               Books
             </MenuItem>,
           ]}
-          {!user ? (
+          {user ? (
+            [<MenuItem
+              key="mybookclub"
+              component={RouterLink}
+              to="/mybookclub"
+              onClick={handleMenuClose}
+              style={menuItemStyle}
+            >
+              My Book Club
+            </MenuItem>,
+            <MenuItem
+              key="users"
+              component={RouterLink}
+              to="/users"
+              onClick={handleMenuClose}
+              style={menuItemStyle}
+            >
+              Users
+            </MenuItem>,
+            <IconButton
+              key="profile-icon"
+              component={RouterLink}
+              to="/profile"
+              onClick={handleMenuClose}
+              color="inherit"
+            >
+              <AccountBox />
+            </IconButton>,
+            <MenuItem
+              key="logout"
+              onClick={handleLogout}
+              style={logoutStyle}
+            >
+              Logout
+            </MenuItem>,
+          ]
+          ) : (
             [
               <MenuItem key="login" component={RouterLink} to="/login" onClick={handleMenuClose} style={menuItemStyle}>
                 Login
               </MenuItem>,
               <MenuItem key="signup" component={RouterLink} to="/signup" onClick={handleMenuClose} style={menuItemStyle}>
                 Signup
-              </MenuItem>,
-            ]
-          ) : (
-            [
-              <MenuItem key="users" component={RouterLink} to="/users" onClick={handleMenuClose} style={menuItemStyle}>
-                Users
-              </MenuItem>,
-              <MenuItem key="mybookclub" component={RouterLink} to="/mybookclub" onClick={handleMenuClose} style={menuItemStyle}>
-                My Book Club
-              </MenuItem>,
-              <MenuItem key="profile" component={RouterLink} to="/profile" onClick={handleMenuClose} style={menuItemStyle}>
-                My Profile
-              </MenuItem>,
-              <MenuItem key="logout" onClick={handleLogout} style={menuItemStyle}>
-                Logout
               </MenuItem>,
             ]
           )}

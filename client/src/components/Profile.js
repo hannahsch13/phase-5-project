@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
-import { useOutletContext, useParams } from "react-router-dom";
+import React, { useContext, useEffect, useState} from "react";
+import { Navigate, useNavigate, useOutletContext, useParams } from "react-router-dom";
 import {useFormik} from 'formik'
 import * as Yup from 'yup'
 import {
@@ -17,11 +17,13 @@ import { UserContext } from "./App";
 
 function Profile() {
     const { user, setUser } = useContext(UserContext);
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
       name: '',
       username: '',
       email: '',
     });
+    const [successMessage, setSuccessMessage] = useState('');
 
     console.log(user)
   
@@ -51,31 +53,38 @@ function Profile() {
           body: JSON.stringify(formData),
         });
   
-        // You can add a success message or redirect the user after successful update
-      } catch (error) {
-        console.error('Error updating user data:', error);
-      }
-    };
+        setSuccessMessage('Profile updated successfully!');
+    } catch (error) {
+      console.error('Error updating user data:', error);
+    }
+  };
   
     const handleDelete = async () => {
       try {
         await fetch(`/user/${user.id}`, {
           method: 'DELETE',
         });
+
+        await fetch('/logout', {
+            method: 'DELETE',
+        });
+    
+        setUser(null);
   
-        // You can add a success message or redirect the user after successful deletion
+        navigate('/home')
       } catch (error) {
         console.error('Error deleting user profile:', error);
       }
     };
   
     return (
-      <Container component="main" maxWidth="xs">
+      <Container component="main" maxWidth="sm" sx={{ marginTop: 4 }}>
         <Paper
           elevation={3}
-          sx={{ padding: 3, display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+          sx={{ padding: 3, display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: '#FDF0D5'  }}
         >
-          <Typography variant="h5">Update Profile</Typography>
+          <Typography variant="h5" gutterBottom style={{ color: '#40531B', fontFamily: 'Bokor', textAlign: 'center' }} >Update Profile</Typography>
+          {successMessage && <p style={{ color: 'green', fontFamily: 'PT Serif' }}>{successMessage}</p>}
           <form onSubmit={handleSubmit}>
             <TextField
               label="Name"
@@ -107,15 +116,23 @@ function Profile() {
               fullWidth
               required
             />
-            <Button type="submit" variant="contained" color="primary" sx={{ marginTop: 2 }}>
+            <div sx={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>
+            <Button type="submit" variant="contained" style={{
+              borderColor: '#32021F',
+              color: '#FDF0D5',
+              backgroundColor: '#371A37',
+              fontFamily: 'PT Serif',
+            }} sx={{ marginTop: 2 }}>
               Update Profile
             </Button>
+            </div>
           </form>
           <Button
             variant="outlined"
             color="error"
             onClick={handleDelete}
-            sx={{ marginTop: 2 }}
+            sx={{ marginTop: 2}}
+            style = {{fontFamily: 'PT Serif' }}
           >
             Delete Profile
           </Button>
