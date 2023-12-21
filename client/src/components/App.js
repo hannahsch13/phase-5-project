@@ -96,16 +96,6 @@ function App() {
     setPosts
   }
 
-// function handleLogout() {
-//   fetch('/logout', {
-//     method: 'DELETE'
-//   }).then((resp) => {
-//     if (resp.ok) {
-//       setUser(null)
-//     }
-//   })
-// }
-
 return (
   <div className='App'>
     <header>

@@ -1,22 +1,16 @@
-#!/usr/bin/env python3
 
-# Standard library imports
-
-# Remote library imports
 import logging
 from flask import request, make_response, session, jsonify
 from flask_restful import Resource
 from datetime import datetime
-# Local imports
+
 from config import db, api, app
-# Add your model imports
+
 from models import User
 from models import BookClub
 from models import Book
 from models import ClubBook
 from models import Post
-
-# Views go here!
 
 
 class Users(Resource):
