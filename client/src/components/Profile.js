@@ -26,23 +26,14 @@ function Profile() {
     console.log(user)
   
     useEffect(() => {
-      const fetchUserData = async () => {
-        try {
-          const response = await fetch(`/user/${user.id}`);
-          if (!response.ok) {
-            throw new Error('Failed to fetch user data');
+        if (user && user.id) {
+            setFormData({
+              name: user.name,
+              username: user.username,
+              email: user.email,
+            });
           }
-  
-          const userData = await response.json();
-          setUser(userData);
-          setFormData(userData);
-        } catch (error) {
-          console.error('Error fetching user data:', error);
-        }
-      };
-  
-      fetchUserData();
-    }, []);
+        }, [user]);
   
     const handleChange = (e) => {
       setFormData({ ...formData, [e.target.name]: e.target.value });

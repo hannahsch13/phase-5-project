@@ -9,7 +9,7 @@ class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
 
 
-    serialize_rules = ('-_password_hash', '-created_at', '-updated_at',  '-role', '-email', '-posts')
+    serialize_rules = ('-_password_hash', '-created_at', '-updated_at',  '-role', '-posts')
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, unique=True, nullable = False)
@@ -22,7 +22,7 @@ class User(db.Model, SerializerMixin):
     bookclub_id = db.Column(db.Integer, db.ForeignKey('bookclubs.id'))
 
     bookclub = db.relationship('BookClub', back_populates= 'users')
-    posts = db.relationship('Post', back_populates='user', lazy='dynamic') 
+    posts = db.relationship('Post', back_populates='user', lazy='dynamic', cascade= 'all, delete-orphan') 
 
 
     @property

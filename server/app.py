@@ -13,6 +13,10 @@ from models import ClubBook
 from models import Post
 
 
+
+
+
+
 class Users(Resource):
     def get(self):
         user_list= [user.to_dict() for user in User.query.all()]
@@ -42,16 +46,6 @@ class UserById(Resource):
     def delete(self, id):
         try:
             user = User.query.get(id)
-
-            if not user:
-                return make_response({'error': "User not found"}, 404)
-
-            if 'user_id' not in session:
-                return make_response({'error': "Unauthorized, you need to log in"}, 401)
-
-            if user != session['user_id']:
-                return make_response({'error': "Unauthorized, you don't own this user account"}, 401)
-
             db.session.delete(user)
             db.session.commit()
             return make_response('', 204)
@@ -66,15 +60,6 @@ class UserById(Resource):
             user = User.query.get(id)
             params = request.json
 
-            if not user:
-                return make_response({'error': "User not found"}, 404)
-
-            if 'user_id' not in session:
-                return make_response({'error': "Unauthorized, you need to log in"}, 401)
-
-            if user != session['user_id']:
-                return make_response({'error': "Unauthorized, you don't own this user account"}, 401)
-
             for attr in params:
                 try:
                     setattr(user, attr, params[attr])
@@ -82,7 +67,7 @@ class UserById(Resource):
                     return make_response({'error': str(validation_error)}, 422)
 
             db.session.commit()
-            return jsonify(user.to_dict())
+            return jsonify(user.to_dict(), 200)
 
         except Exception as e:
             print(str(e))
@@ -129,7 +114,7 @@ class BookClubs(Resource):
         
     def post(self):
         data = request.get_json()
-        club = BookClub(club_name=data['club_name'], picture=data['picture'], books = data['books'])
+        club = BookClub(club_name=data['club_name'], picture=data['picture'])
         db.session.add(club)
         db.session.commit()
         # session['user_id'] = user.id
