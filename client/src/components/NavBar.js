@@ -27,6 +27,10 @@ function NavBar({ user, setUser }) {
     handleMenuClose();
     navigate('/home')
   };
+  const menuItemStyle = {
+    fontFamily: 'PT Serif',
+    fontWeight: 'bold',
+  };
 
   return (
     <AppBar position="static" color="default">
@@ -46,7 +50,7 @@ function NavBar({ user, setUser }) {
             flexGrow: 1,
             textAlign: '',
             fontFamily: 'UnifrakturCook',
-            color: '#371A37'
+            color: '#371A37',
           }}
         >
           StorySync
@@ -58,146 +62,45 @@ function NavBar({ user, setUser }) {
           open={Boolean(anchorEl)}
           onClose={handleMenuClose}
         >
-          <MenuItem component={RouterLink} to="/home" onClick={handleMenuClose}>
-          <Typography
-                  style={{
-                    fontFamily: 'PT Serif',
-                    color: '#A86538',
-                    fontWeight: 'bold',
-                  }}
-                >
-                  Home
-                </Typography>
-          </MenuItem>
-          <MenuItem
-            component={RouterLink}
-            to="/clubs"
-            onClick={handleMenuClose}
-          >
-                <Typography
-                  style={{
-                    fontFamily: 'PT Serif',
-                    color: '#A86538',
-                    fontWeight: 'bold',
-                  }}
-                >
-                  Book Clubs
-                </Typography>
-          </MenuItem>
-                    <MenuItem
-                      component={RouterLink}
-                      to="/books"
-                      onClick={handleMenuClose}
-                    >
-                      <Typography
-                        style={{
-                          fontFamily: 'PT Serif',
-                          color: '#A86538',
-                          fontWeight: 'bold',
-                        }}
-                      >
-                        Books
-                      </Typography>
-                    </MenuItem>
+          {[
+            <MenuItem key="home" component={RouterLink} to="/home" onClick={handleMenuClose} style={menuItemStyle}>
+              Home
+            </MenuItem>,
+            <MenuItem key="clubs" component={RouterLink} to="/clubs" onClick={handleMenuClose} style={menuItemStyle}>
+              Book Clubs
+            </MenuItem>,
+            <MenuItem key="books" component={RouterLink} to="/books" onClick={handleMenuClose} style={menuItemStyle}>
+              Books
+            </MenuItem>,
+          ]}
           {!user ? (
-            <>
-              <MenuItem
-                component={RouterLink}
-                to="/login"
-                onClick={handleMenuClose}
-              >
-                <Typography
-                  style={{
-                    fontFamily: 'PT Serif',
-                    color: '#371A37',
-                    fontWeight: 'bold',
-                  }}
-                >
-                  Login
-                </Typography>
-              </MenuItem>
-              <MenuItem
-                component={RouterLink}
-                to="/signup"
-                onClick={handleMenuClose}
-              >
-                <Typography
-                  style={{
-                    fontFamily: 'PT Serif',
-                    color: '#371A37',
-                    fontWeight: 'bold',
-                  }}
-                >
-                  Signup
-                </Typography>
-              </MenuItem>
-            </>
+            [
+              <MenuItem key="login" component={RouterLink} to="/login" onClick={handleMenuClose} style={menuItemStyle}>
+                Login
+              </MenuItem>,
+              <MenuItem key="signup" component={RouterLink} to="/signup" onClick={handleMenuClose} style={menuItemStyle}>
+                Signup
+              </MenuItem>,
+            ]
           ) : (
-            <>
-              <MenuItem
-                component={RouterLink}
-                to="/users"
-                onClick={handleMenuClose}
-              >
-                <Typography
-                  style={{
-                    fontFamily: 'PT Serif',
-                    color: '#A86538',
-                    fontWeight: 'bold',
-                  }}
-                >
-                  Users
-                </Typography>
-              </MenuItem>
-              <MenuItem
-                component={RouterLink}
-                to="/mybookclub"
-                onClick={handleMenuClose}
-              >
-                <Typography
-                  style={{
-                    fontFamily: 'PT Serif',
-                    color: '#A86538',
-                    fontWeight: 'bold',
-                  }}
-                >
-                  My Book Club
-                </Typography>
-              </MenuItem>
-              {/* <MenuItem
-                component={RouterLink}
-                to="/profile"
-                onClick={handleMenuClose}
-              >
-                <Typography
-                  style={{
-                    fontFamily: 'PT Serif',
-                    color: '#A86538',
-                    fontWeight: 'bold',
-                  }}
-                >
-                  My Profile
-                </Typography>
-              </MenuItem> */}
-              <MenuItem onClick={handleLogout}>
-                <Typography
-                  style={{
-                    fontFamily: 'PT Serif',
-                    color: '#371A37',
-                    fontWeight: 'bold',
-                  }}
-                >
-                  Logout
-                </Typography>
-              </MenuItem>
-            </>
+            [
+              <MenuItem key="users" component={RouterLink} to="/users" onClick={handleMenuClose} style={menuItemStyle}>
+                Users
+              </MenuItem>,
+              <MenuItem key="mybookclub" component={RouterLink} to="/mybookclub" onClick={handleMenuClose} style={menuItemStyle}>
+                My Book Club
+              </MenuItem>,
+              <MenuItem key="profile" component={RouterLink} to="/profile" onClick={handleMenuClose} style={menuItemStyle}>
+                My Profile
+              </MenuItem>,
+              <MenuItem key="logout" onClick={handleLogout} style={menuItemStyle}>
+                Logout
+              </MenuItem>,
+            ]
           )}
         </Menu>
       </Toolbar>
     </AppBar>
   );
 }
-
 export default NavBar;
-
-  

@@ -49,7 +49,7 @@ class UserById(Resource):
             if 'user_id' not in session:
                 return make_response({'error': "Unauthorized, you need to log in"}, 401)
 
-            if user.user_id != session['user_id']:
+            if user != session['user_id']:
                 return make_response({'error': "Unauthorized, you don't own this user account"}, 401)
 
             db.session.delete(user)
@@ -72,7 +72,7 @@ class UserById(Resource):
             if 'user_id' not in session:
                 return make_response({'error': "Unauthorized, you need to log in"}, 401)
 
-            if user.user_id != session['user_id']:
+            if user != session['user_id']:
                 return make_response({'error': "Unauthorized, you don't own this user account"}, 401)
 
             for attr in params:

@@ -2,98 +2,135 @@ import React, { useContext, useEffect, useState } from "react";
 import { useOutletContext, useParams } from "react-router-dom";
 import {useFormik} from 'formik'
 import * as Yup from 'yup'
+import {
+    TextField,
+    Button,
+    Container,
+    Typography,
+    Paper,
+  } from '@mui/material';
 
 
 
 import { UserContext } from "./App";
 
 
-const Profile = () => {
-    const { id: userId } = useParams();
+function Profile() {
     const { user, setUser } = useContext(UserContext);
-
-    const userArray = user ? Object.values(user) : [];
-
-    console.log(userArray)
-
-    const formik = useFormik({
-        initialValues: {
-            username: userArray[0] || '', // Set default value to an empty string
-            name: userArray[1] || '',     // Set default value to an empty string
-        },
-        validationSchema: Yup.object({
-            username: Yup.string().required('Username is required'),
-            name: Yup.string().required('Name is required'),
-        }),
-        onSubmit: (values) => {
-            // Send a PATCH request to update user details
-            fetch(`/user/${user.id}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(values),
-            })
-                .then(response => response.json())
-                .then(data => {
-                    // Update the user context with the new data
-                    setUser(data);
-                    // Handle the response from the server if needed
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        },
+    const [formData, setFormData] = useState({
+      name: '',
+      username: '',
+      email: '',
     });
 
+    console.log(user)
+  
     useEffect(() => {
-        // Populate the form data with the user context data
-        formik.setValues({
-            username: userArray[0] || '', // Set default value to an empty string
-            name: userArray[1] || '',     // Set default value to an empty string
+      const fetchUserData = async () => {
+        try {
+          const response = await fetch(`/user/${user.id}`);
+          if (!response.ok) {
+            throw new Error('Failed to fetch user data');
+          }
+  
+          const userData = await response.json();
+          setUser(userData);
+          setFormData(userData);
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      };
+  
+      fetchUserData();
+    }, []);
+  
+    const handleChange = (e) => {
+      setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+  
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+  
+      try {
+        await fetch(`/user/${user.id}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
         });
-    }, [userArray, formik, setUser]); // Include formik and setUser in the dependencies
-
-
+  
+        // You can add a success message or redirect the user after successful update
+      } catch (error) {
+        console.error('Error updating user data:', error);
+      }
+    };
+  
+    const handleDelete = async () => {
+      try {
+        await fetch(`/user/${user.id}`, {
+          method: 'DELETE',
+        });
+  
+        // You can add a success message or redirect the user after successful deletion
+      } catch (error) {
+        console.error('Error deleting user profile:', error);
+      }
+    };
+  
     return (
-        <div>
-            <h1>User Profile</h1>
-            <form onSubmit={formik.handleSubmit}>
-                <label htmlFor="username">Username:</label>
-                <input
-                    type="text"
-                    id="username"
-                    name="username"
-                    value={formik.values.username}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                />
-                {formik.touched.username && formik.errors.username && (
-                    <div>{formik.errors.username}</div>
-                )}
-
-                <label htmlFor="name">Name:</label>
-                <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formik.values.name}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                />
-                {formik.touched.name && formik.errors.name && (
-                    <div>{formik.errors.name}</div>
-                )}
-
-                <button type="submit">Update Profile</button>
-            </form>
-
-            <div>
-                <p>Current Username: {userArray[0]}</p>
-                <p>Current Name: {userArray[1]}</p>
-            </div>
-        </div>
+      <Container component="main" maxWidth="xs">
+        <Paper
+          elevation={3}
+          sx={{ padding: 3, display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+        >
+          <Typography variant="h5">Update Profile</Typography>
+          <form onSubmit={handleSubmit}>
+            <TextField
+              label="Name"
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              margin="normal"
+              fullWidth
+              required
+            />
+            <TextField
+              label="Username"
+              type="text"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+              margin="normal"
+              fullWidth
+              required
+            />
+            <TextField
+              label="Email"
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              margin="normal"
+              fullWidth
+              required
+            />
+            <Button type="submit" variant="contained" color="primary" sx={{ marginTop: 2 }}>
+              Update Profile
+            </Button>
+          </form>
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={handleDelete}
+            sx={{ marginTop: 2 }}
+          >
+            Delete Profile
+          </Button>
+        </Paper>
+      </Container>
     );
-};
-
+  };
+  
 export default Profile;
